@@ -1,0 +1,22 @@
+---
+title: "R 2 Phoenix"
+output: 
+  html_document:
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br>
+
+Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [City of Phoenix](https://www.phoenixopendata.com/) open data platform.
+
+<br>
+
+### [Phoenix Crime Data]()
+
+Taking a look at the Phoenix crime data.
+
+<br>
+

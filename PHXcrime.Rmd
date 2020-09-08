@@ -1,0 +1,144 @@
+---
+title: "Phoenix Crime Trends"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 12, 
+                      fig.height = 10)
+
+rm(list = ls())
+
+```
+
+<br><br>
+
+## Has crime in Phoenix increased during the COVID-19 pandemic?  
+
+I was wondering whether there has been an increase in crime in Phoenix since March 2020. So, I went to the city's [open data site](https://www.phoenixopendata.com) and pulled the [crime data](https://www.phoenixopendata.com/dataset/crime-data/resource/0ce3411a-2fc6-4302-a33f-167f68608a20) which is updated every day.  
+
+<br><br>
+
+### Getting the data.  
+
+Let's pull the most recent data from the site.
+
+```{r, echo = TRUE, eval = TRUE}
+
+# set the url where the data are located.
+url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
+
+# pull in the csv file.
+crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
+
+# take a look at the data.
+head(crime.data)  
+tail(crime.data)
+dim(crime.data)
+
+```  
+
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. The `dim()` command returns 315,386 reports.
+
+<br><br>
+
+### Cleaning the data.  
+
+Now that the data are in the workspace, let's clean up the date and the crime categories to make plotting them fairly easy. For this step, we will use the  `lubridate()` package.
+
+```{r, echo = TRUE, eval = TRUE}
+
+# Load the library.
+library(lubridate)
+
+# Check the class of the data variable.
+#crime.data$OCCURRED.ON
+
+# Check for format of the occurred on date variable.
+crime.data$OCCURRED.ON[1] # this is month, day, year as well as the time (hours and minutes).
+mdy_hm(crime.data$OCCURRED.ON[1])
+
+# create an object that is the time and the category.
+dates.crimes <- data.frame(
+  date = as.Date(mdy_hm(crime.data$OCCURRED.ON)),
+  crime = crime.data$UCR.CRIME.CATEGORY,
+  days.since = unclass(as.Date(mdy_hm(crime.data$OCCURRED.ON))) 
+  )
+
+table(is.na(dates.crimes$date)) # 420 are missing dates.
+table(is.na(dates.crimes$crime)) # none missing type of crime.
+
+# Let's drop those cases missing dates.
+dates.crimes <- dates.crimes[is.na(dates.crimes$date) == FALSE,]
+dim(crime.data)[1] - dim(dates.crimes)[1] # the number of cases you had to drop due to missing.
+
+# The days.since object represents the number of days since 1/1/1970.
+# We got this using the unclass() function. I like working with the numbers.
+head(dates.crimes$days.since)
+
+```
+
+<br><br>
+
+### Plot it!
+
+Now, we want to plot the data where the months are the x-axis and the frequency of the crimes are the y-axis. We have to set up some plot parameters first to get things looking nice.
+
+```{r, echo = TRUE, eval = TRUE}
+
+# Set up the values we want to plot.
+y.1 <- as.vector(table(dates.crimes$days.since - dates.crimes$days.since[1]))
+x.1 <- c(seq(min(dates.crimes$days.since - dates.crimes$days.since[1]),max(dates.crimes$days.since - dates.crimes$days.since[1]),length.out = length(y.1)))
+
+# unclass(as.Date("2020-03-01")) - dates.crimes$days.since[1] # this is March 1st 2020.
+march.1.2020 <- (unclass(as.Date("2020-03-01")) - dates.crimes$days.since[1])
+march.1.2019 <- (unclass(as.Date("2019-03-01")) - dates.crimes$days.since[1])
+march.1.2018 <- (unclass(as.Date("2018-03-01")) - dates.crimes$days.since[1])
+march.1.2017 <- (unclass(as.Date("2017-03-01")) - dates.crimes$days.since[1])
+march.1.2016 <- (unclass(as.Date("2016-03-01")) - dates.crimes$days.since[1])
+marches      <- cbind(march.1.2019,march.1.2018,march.1.2017,march.1.2016)
+
+### Set plot basics and axes.
+plot.new()
+plot.window(xlim = c(0, max(x.1)), ylim = c(min(y.1), max(y.1)+10))   
+
+### Plot the values.  
+points(x = x.1, y = y.1, col = "black", pch = 16, cex = 0.75)
+lines(x = x.1, y = y.1, col = "grey75", pch = 16, cex = 0.75)
+
+# Add a segment to shown the median.
+#segments(0,median(y.1),max(x.1),median(y.1), lwd = 3, lty = 3, col = "black")
+
+# Add a line and some text for March 2020.
+segments(march.1.2020, min(y.1), march.1.2020, 270,lwd = 2, lty = 3, col = "red")
+text(march.1.2020, 275,"March 1, 2020", col="red", pos=1, cex=1.1)
+
+# Add a line and some text for March in the prior years.
+for(i in 1:length(marches)){
+  segments(marches[i], min(y.1), marches[i], 270,lwd = 1, lty = 2, col = "black")
+}
+text(marches[1], 275,"March 1, 2019", col="black", pos=1, cex=0.8)
+text(marches[2], 275,"March 1, 2018", col="black", pos=1, cex=0.8)
+text(marches[3], 275,"March 1, 2017", col="black", pos=1, cex=0.8)
+text(marches[4], 275,"March 1, 2016", col="black", pos=1, cex=0.8)
+
+# Add a lowess line to see the trend.
+lines(lowess(x.1, y.1), type = "l", col= "black", lwd = 2)
+
+# Add a title.
+title("Reports of Crime for Phoenix (Nov. 2015 - Sept. 2020)\n[lowess shown in horizontal black line]")
+
+```
+
+<br><br>
+
+### Conclusions?  
+
+This is just a quick look, but it shows that crime went down after the pandemic hit in Phoenix. There is a brief uptick though. So, perhaps we should take a closer look at the 2020 data.
