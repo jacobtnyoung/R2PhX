@@ -16,7 +16,7 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 ### [Phoenix Crime Data]()
 
-Taking a look at the Phoenix crime data.
+Taking a look at the Phoenix crime data to see how crime changed along with the shutdown of services in Phoenix as a consequence of COVID-19.
 
 <br>
 
