@@ -67,7 +67,7 @@ Let's pull the most recent data for **crime incidents** from the site.
 n.cases <- dim(crime.data)[1]
 ```  
 
-The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%d %B, %Y')`, there were `r n.cases` crime incidents from 11/2015 to within a week of the current date.   
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r n.cases` crime incidents from 11/2015 to within a week of the current date.   
 
 #### Getting the data (code)  
 ```{r, echo = TRUE, eval = FALSE}
