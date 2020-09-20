@@ -10,13 +10,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 <br>
 
-Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [City of Phoenix](https://www.phoenixopendata.com/) open data platform.
+Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [City of Phoenix](https://www.phoenix.gov/) open [data](https://www.phoenixopendata.com/) portal.
+
+[City of Phoenix](https://www.phoenix.gov/) open [data](https://www.phoenixopendata.com/) portal? It is a repository for data that the city collects and makes available. As of last check, there were over 50 datasets available. The site is well organized, so I would encourage you to open an new tab and check it out. The site has a [tips](https://www.phoenixopendata.com/pages/tips) page with a good intro to site navigation and how it is maintained.  
+
+*This* site uses the data from the [data portal](https://www.phoenixopendata.com/) to examine various questions (see below). **Enjoy!**
+
 
 <br>
 
-### [Phoenix Crime Data](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)
+#### [What's going on with crime in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)
 
-Taking a look at the Phoenix crime data to see how crime changed along with the shutdown of services in Phoenix as a consequence of COVID-19.
+This pages analyzes the [Phoenix crime data](https://www.phoenixopendata.com/dataset/crime-data) file to demonstrate how to work with the file as well as examine current trends in crime in Phoenix.  
+
 
 <br>
 
+
+#### [Did crime increase or decrease after COVID-19?]()
+
+So what do you think? Did crime go up or down (or stay the same) during the pandemic? This pages analyzes the [Phoenix crime data](https://www.phoenixopendata.com/dataset/crime-data) file see how crime changed along with the shutdown of services in Phoenix as a consequence of COVID-19.
+
+<br>
+
+###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***
