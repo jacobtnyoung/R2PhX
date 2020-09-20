@@ -40,7 +40,11 @@ crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
 
 # take a look at the data.
 head(crime.data)  
-tail(crime.data)
+
+``` 
+
+```{r, echo = FALSE, eval = TRUE}
+
 dim(crime.data)
 
 ```  

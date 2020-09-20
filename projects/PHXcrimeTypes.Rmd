@@ -1,0 +1,88 @@
+---
+title: "Phoenix Crime Trends by Crime Type"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: yeti
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 12, 
+                      fig.height = 10)
+
+rm(list = ls())
+
+```
+
+<br><br>
+
+## Plotting crime types in Phoenix across time  
+
+
+<br><br>
+
+### Getting the data.  
+
+Let's pull the most recent data and clean it up from the site.
+
+```{r, echo = TRUE, eval = TRUE}
+
+url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
+
+crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
+
+# Do some cleaning.
+library(lubridate)
+
+PHX.crimes <- data.frame(
+  date = as.Date(mdy_hm(crime.data$OCCURRED.ON)),
+  crime = crime.data$UCR.CRIME.CATEGORY
+  )
+
+PHX.crimes <- PHX.crimes[is.na(PHX.crimes$date) == FALSE,] # Let's drop those cases missing dates.
+PHX.crimes.df <- aggregate( PHX.crimes , by = list(PHX.crimes$date,PHX.crimes$crime) , length ) # aggregate to counts by day and type.
+PHX.crimes.df$days.since <- unclass(as.Date(PHX.crimes.df$Group.1)) # add the days since 1/1/70.
+PHX.crimes.df <- PHX.crimes.df[,-4] # drop a redundant column.
+PHX.crimes.df$days <- PHX.crimes.df$days.since - min(PHX.crimes.df$days.since)
+names(PHX.crimes.df) <- c("Date", "Crime", "Frequency", "days.since", "Days") # rename things.
+crime.names <- unique(PHX.crimes.df$Crime) # names.
+
+```
+
+
+```{r, echo=FALSE}
+
+selectInput( inputId='crime', 
+            label='UCR Crime Classification', 
+            choices=unique(PHX.crimes$crime),
+            selected="MURDER AND NON-NEGLIGENT MANSLAUGHTER"
+          )
+
+renderPlot({
+  
+  # Set plot basics and axes.
+  plot.new()
+  plot.window(xlim = c(min(PHX.crimes.df$Days), max(PHX.crimes.df$Days)), 
+              ylim = c(min(PHX.crimes.df$Frequency), max(PHX.crimes.df$Frequency))
+              )   
+  
+  # Plot the values.  
+  for(i in 1:length(crime.names)){
+  points( PHX.crimes.df$Frequency[PHX.crimes.df$Crime == crime.names[i]], type="l", col="gray70" )
+  }
+
+  # Highlight a specific crime type.
+  points( PHX.crimes.df$Frequency[PHX.crimes.df$Crime == input$crime], type="l", col="darkred" )
+  
+  
+})
+  
+
+```
+
+<br><br>
