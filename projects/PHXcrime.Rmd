@@ -50,13 +50,14 @@ For both the [Calls for Service](https://www.phoenixopendata.com/dataset/calls-f
 
 <br><br>
 
-### To the Data! {.tabset} 
+### To the Data!
 
 <br>
 
 ```{r, echo = FALSE, eval = TRUE}
 url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
 crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
+crime.data <- na.omit(crime.data)
 ```
 
 #### Getting and Pre-processing the Data  
@@ -67,7 +68,7 @@ Let's pull the most recent data for **crime incidents** from the site.
 n.cases <- dim(crime.data)[1]
 ```  
 
-The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r n.cases` crime incidents from 11/2015 to within a week of the current date.   
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r n.cases` crime incidents with complete data from 11/2015 to within a week of the current date.   
 
 #### Getting the data (code)  
 ```{r, echo = TRUE, eval = FALSE}
@@ -78,6 +79,9 @@ url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1
 # pull in the csv file.
 crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
 
+# drop cases missing on date.
+crime.data <- na.omit(crime.data)
+
 # take a look at the data.
 head(crime.data)  
 
@@ -85,124 +89,96 @@ head(crime.data)
 
 #### Preprocessing the data (code)  
 
-Now that the data are in the workspace, let's clean up the date and the crime categories to make plotting them fairly easy. For this step, we will use the  `lubridate()` package.
+Now that the data are in the workspace, let's clean up the date and the crime categories to make plotting them fairly easy. To do so, I am drawing from a [lab](https://ds4ps.org/cpp-526-sum-2020/labs/lab-05-instructions.html) from ASU's [Foundations of Data Science Part I](https://ds4ps.org/) course in the Program Evaluation and Data Analytics. See the "Working with Dates" section of the site. We will use the `strptime()` and `format()` functions here.
 
 ```{r, echo = TRUE, eval = TRUE}
 
-# Load the library.
-# install.packages("lubridate") # if you have not installed the package.
-library(lubridate)
+# The date and time variable is a character string.
+head(crime.data$OCCURRED.ON)
+is.character(crime.data$OCCURRED.ON)
 
-# create an object that is the time and the category.
-dates.crimes <- data.frame(
-  date = as.Date(mdy_hm(crime.data$OCCURRED.ON)),
-  crime = crime.data$UCR.CRIME.CATEGORY,
-  days.since = unclass(as.Date(mdy_hm(crime.data$OCCURRED.ON))) 
+# Convert the string dates to a date format code.
+date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
+head(date.vec)
+tail(date.vec)
+
+# Now, let's use the format() function to create several objects based on the date and time.
+crime.data$year   <- format( date.vec, format="%Y" )
+crime.data$month  <- format( date.vec, format="%B" )
+crime.data$day365 <- format( date.vec, format="%j" )
+crime.data$week   <- format( date.vec, format="%V" )
+
+```
+
+Let's start by looking at the daily counts of crime from when the data are first available (i.e. November 2015) and look at the trend up to the current date. 
+
+```{r, echo = TRUE, eval = TRUE}
+
+# Now, let's use dplyr and tidyr to get the data in a format where we can look at the time series.
+library( dplyr )
+library( tidyr )
+
+
+# Use dplyr() to create an object that is the daily count of crimes.
+crimes.by.day <- 
+  crime.data %>% 
+  select( year, month, day365 ) %>%   
+  filter( !is.na( day365 ) ) %>% 
+  group_by( year, month, day365 ) %>% 
+  summarize( counts = n() ) %>% 
+  ungroup() %>% 
+  mutate( day.time = seq( 1, length( counts ) ) ) %>% 
+  select( counts, day.time ) %>% 
+  mutate( days = seq( as.Date( "2015/11/1" ), as.Date( tail( date.vec ) )[1], "days" ) ) %>% 
+  arrange( day.time )
+
+# Finally, let's take a look using ggplot2.
+library( ggplot2 )
+
+# Add the dates for the plot.
+crimes.by.day <- as.data.frame(crimes.by.day)
+
+# Now let's plot it!
+crimes.by.day %>% 
+  ggplot( aes( days, counts ) ) +
+  geom_line( color = "grey80" ) +
+  geom_point( alpha = 1/5, color = "black" ) +
+  labs( x = "", y = "Counts of Crime per Day" ) +
+  ggtitle( "Daily Crime Counts in Phoenix from Nov. 2015 to Sept. 2020" ) +
+  geom_smooth( color = "darkblue", span = 0.2 ) +
+  theme_minimal() 
+
+```
+
+This view is useful, but it might help if we break it down by year and month. 
+
+```{r, echo = TRUE, eval = TRUE}
+
+# Back to dplyr! Let's create an object that is monthly counts and sorted by year. 
+crimes.by.month <- 
+  crime.data %>% 
+  select( year, month ) %>%   
+  filter( year != 2015 ) %>%  
+  filter( !is.na( year ) ) %>% 
+  group_by( year, month ) %>% 
+  summarize( counts = n() ) %>% 
+  spread( year, counts ) %>% 
+  arrange( match( month, month.name ) ) %>% 
+  select( !month )
+
+# Now, lets use the ts() function to create a time series object.
+monthly.crimes.by.year <- ts(
+  matrix(as.matrix(crimes.by.month), ncol = 1), start=c(2016, 1), end=c(2020, 12), frequency=12
   )
 
-# Let's drop those cases missing dates.
-dates.crimes <- dates.crimes[is.na(dates.crimes$date) == FALSE,]
+# Finally, let's take a look using ggseasonplot().
+library(ggplot2)
+library(forecast)
 
-# The number of cases you had to drop due to missing.
-dim(crime.data)[1] - dim(dates.crimes)[1] 
-
-```
-
-<br><br>
-
-### Plot it! {.tabset}  
-
-<br>
-
-#### Plotting the Data
-
-<br>
-
-What does the plot say?
-
-<br>
-
-```{r, echo = FALSE, eval = TRUE}
-
-# Set up the values we want to plot.
-y.1 <- as.vector(table(dates.crimes$days.since - dates.crimes$days.since[1]))
-x.1 <- c(seq(min(dates.crimes$days.since - dates.crimes$days.since[1]),max(dates.crimes$days.since - dates.crimes$days.since[1]),length.out = length(y.1)))
-
-# Set up points for the years.
-march.1.2020 <- (unclass(as.Date("2020-03-01")) - dates.crimes$days.since[1])
-march.1.2019 <- (unclass(as.Date("2019-03-01")) - dates.crimes$days.since[1])
-march.1.2018 <- (unclass(as.Date("2018-03-01")) - dates.crimes$days.since[1])
-march.1.2017 <- (unclass(as.Date("2017-03-01")) - dates.crimes$days.since[1])
-march.1.2016 <- (unclass(as.Date("2016-03-01")) - dates.crimes$days.since[1])
-marches      <- cbind(march.1.2020,march.1.2019,march.1.2018,march.1.2017,march.1.2016)
-
-### Set plot basics and axes.
-plot.new()
-plot.window(xlim = c(0, max(x.1)), ylim = c(min(y.1), max(y.1)+10))   
-
-### Plot the values.  
-points(x = x.1, y = y.1, col = "black", pch = 16, cex = 0.75)
-lines(x = x.1, y = y.1, col = "grey75", pch = 16, cex = 0.75)
-
-# Add a line and some text for March in the prior years.
-for(i in 1:length(marches)){
-  segments(marches[i], min(y.1), marches[i], 270,lwd = 1, lty = 2, col = "black")
-}
-text(marches[1], 275,"March 1, 2020", col="black", pos=1, cex=0.8)
-text(marches[2], 275,"March 1, 2019", col="black", pos=1, cex=0.8)
-text(marches[3], 275,"March 1, 2018", col="black", pos=1, cex=0.8)
-text(marches[4], 275,"March 1, 2017", col="black", pos=1, cex=0.8)
-text(marches[5], 275,"March 1, 2016", col="black", pos=1, cex=0.8)
-
-# Add a lowess line to see the trend.
-lines(lowess(x.1, y.1), type = "l", col= "black", lwd = 2)
-
-# Add a title.
-title("Reports of Crime for Phoenix\n[lowess shown in horizontal black line]")
-
-```
-
-#### Code for plot  
-
-Now, we want to plot the data where the months are the x-axis and the frequency of the crimes are the y-axis. We have to set up some plot parameters first to get things looking nice.
-
-```{r, echo = TRUE, eval = TRUE}
-
-# Set up the values we want to plot.
-y.1 <- as.vector(table(dates.crimes$days.since - dates.crimes$days.since[1]))
-x.1 <- c(seq(min(dates.crimes$days.since - dates.crimes$days.since[1]),max(dates.crimes$days.since - dates.crimes$days.since[1]),length.out = length(y.1)))
-
-# Set up points for the years.
-march.1.2020 <- (unclass(as.Date("2020-03-01")) - dates.crimes$days.since[1])
-march.1.2019 <- (unclass(as.Date("2019-03-01")) - dates.crimes$days.since[1])
-march.1.2018 <- (unclass(as.Date("2018-03-01")) - dates.crimes$days.since[1])
-march.1.2017 <- (unclass(as.Date("2017-03-01")) - dates.crimes$days.since[1])
-march.1.2016 <- (unclass(as.Date("2016-03-01")) - dates.crimes$days.since[1])
-marches      <- cbind(march.1.2020,march.1.2019,march.1.2018,march.1.2017,march.1.2016)
-
-### Set plot basics and axes.
-plot.new()
-plot.window(xlim = c(0, max(x.1)), ylim = c(min(y.1), max(y.1)+10))   
-
-### Plot the values.  
-points(x = x.1, y = y.1, col = "black", pch = 16, cex = 0.75)
-lines(x = x.1, y = y.1, col = "grey75", pch = 16, cex = 0.75)
-
-# Add a line and some text for March in the prior years.
-for(i in 1:length(marches)){
-  segments(marches[i], min(y.1), marches[i], 270,lwd = 1, lty = 2, col = "black")
-}
-text(marches[1], 275,"March 1, 2020", col="black", pos=1, cex=0.8)
-text(marches[2], 275,"March 1, 2019", col="black", pos=1, cex=0.8)
-text(marches[3], 275,"March 1, 2018", col="black", pos=1, cex=0.8)
-text(marches[4], 275,"March 1, 2017", col="black", pos=1, cex=0.8)
-text(marches[5], 275,"March 1, 2016", col="black", pos=1, cex=0.8)
-
-# Add a lowess line to see the trend.
-lines(lowess(x.1, y.1), type = "l", col= "black", lwd = 2)
-
-# Add a title.
-title("Reports of Crime for Phoenix\n[lowess shown in horizontal black line]")
+monthly.crimes.by.year %>% 
+  ggseasonplot(
+    main = "Plot of Monthly Crime Count by Years for Phoenix"
+  ) + theme_minimal() 
 
 ```
 
