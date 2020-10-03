@@ -56,8 +56,8 @@ For both the [Calls for Service](https://www.phoenixopendata.com/dataset/calls-f
 
 ```{r, echo = FALSE, eval = TRUE}
 url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
-crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
-crime.data <- na.omit(crime.data)
+crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
+crime.data <- na.omit( crime.data )
 ```
 
 #### Getting and Pre-processing the Data  
@@ -65,7 +65,7 @@ crime.data <- na.omit(crime.data)
 Let's pull the most recent data for **crime incidents** from the site.
 
 ```{r, echo = FALSE, eval = TRUE}
-n.cases <- dim(crime.data)[1]
+n.cases <- dim( crime.data )[1]
 ```  
 
 The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r n.cases` crime incidents with complete data from 11/2015 to within a week of the current date.   
@@ -77,13 +77,13 @@ The data are reported as UCR crime classifications and have geographic informati
 url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
 
 # pull in the csv file.
-crime.data <- read.csv(url, as.is = TRUE, header = TRUE)
+crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
 
 # drop cases missing on date.
-crime.data <- na.omit(crime.data)
+crime.data <- na.omit( crime.data )
 
 # take a look at the data.
-head(crime.data)  
+head( crime.data )  
 
 ``` 
 
@@ -94,13 +94,13 @@ Now that the data are in the workspace, let's clean up the date and the crime ca
 ```{r, echo = TRUE, eval = TRUE}
 
 # The date and time variable is a character string.
-head(crime.data$OCCURRED.ON)
-is.character(crime.data$OCCURRED.ON)
+head( crime.data$OCCURRED.ON )
+is.character( crime.data$OCCURRED.ON )
 
 # Convert the string dates to a date format code.
 date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
-head(date.vec)
-tail(date.vec)
+head( date.vec )
+tail( date.vec )
 
 # Now, let's use the format() function to create several objects based on the date and time.
 crime.data$year   <- format( date.vec, format="%Y" )
@@ -136,7 +136,7 @@ crimes.by.day <-
 library( ggplot2 )
 
 # Add the dates for the plot.
-crimes.by.day <- as.data.frame(crimes.by.day)
+crimes.by.day <- as.data.frame( crimes.by.day )
 
 # Now let's plot it!
 crimes.by.day %>% 
@@ -150,7 +150,12 @@ crimes.by.day %>%
 
 ```
 
-This view is useful, but it might help if we break it down by year and month. 
+The plot shows a fairly stable daily count of crimes. *But*, a marked **decline** beginning at the end of 2019.  
+
+The daily count view is useful, but it might help if we break it down by year and month. That is because there is a seasonality to crime incidents. One way to show this is to plot the monthly incident count for each year.  
+
+This takes some reworking of the data. Rather than collapsing by day, we want to record counts by month. *However*, the major change is that we need to create a `ts()` object. That is, we need to create a time series object using the `ts()` function. We will also use the `ggseasonplot()` from the `forecast` package.
+
 
 ```{r, echo = TRUE, eval = TRUE}
 
@@ -168,18 +173,102 @@ crimes.by.month <-
 
 # Now, lets use the ts() function to create a time series object.
 monthly.crimes.by.year <- ts(
-  matrix(as.matrix(crimes.by.month), ncol = 1), start=c(2016, 1), end=c(2020, 12), frequency=12
+  matrix( as.matrix( crimes.by.month ), ncol = 1 ), start=c( 2016, 1 ), end=c( 2020, 12 ), frequency=12
   )
 
 # Finally, let's take a look using ggseasonplot().
-library(ggplot2)
-library(forecast)
+library( ggplot2 )
+library( forecast )
 
 monthly.crimes.by.year %>% 
   ggseasonplot(
-    main = "Plot of Monthly Crime Count by Years for Phoenix"
-  ) + theme_minimal() 
+   year.labels=FALSE,
+   main = "Plot of Monthly Crime Count by Years for Phoenix" ) + 
+  theme_gray() 
 
 ```
 
 <br><br>
+
+Note that for 2020, the line stops in September, that is the last month we have data from the portal.  
+
+
+### What about adjusting for population changes?
+
+If you just said, **BUT** these are counts and do not reflect population differences! Your right! So, let's pull population data from the [Census Bureau](https://www.census.gov/topics/population.html). Specifically, the data for [Arizona](https://www2.census.gov/programs-surveys/popest/tables/2010-2019/cities/totals/SUB-IP-EST2019-ANNRES-04.xlsx). This is an Excel file with estimates of population for incorporated places. Since this is an .xlxs file, we will use the `openxlxs` package.
+
+Let's pull it in and get the data for Phoenix.
+
+```{r, echo = FALSE, eval = TRUE}
+library(openxlsx)
+
+# get the data.
+pop.data <- read.xlsx(
+  "https://www2.census.gov/programs-surveys/popest/tables/2010-2019/cities/totals/SUB-IP-EST2019-ANNRES-04.xlsx",
+  colNames = TRUE,
+  startRow = 4
+  )
+
+# Find the row with the data for Phoenix.
+grep("Phoenix", pop.data[,1])
+
+# It is the 55th row in the object. So, we need to pull that row.
+phoenix.pop <-  pop.data[55,]
+phoenix.pop
+
+# Now, we only need the data for 2016-2019.
+phoenix.pop <- phoenix.pop[-c(1:9)]
+phoenix.pop
+
+```
+
+Ok! We have our population data. But, what about 2020? It is not reported yet. So, we need to fill that in. We could do this various ways, but for ease, let's just add the difference in growth from 2018 to 2019. 
+
+```{r, echo = FALSE, eval = TRUE}
+
+# now, lets create a vector for population and add it to your object.
+phoenix.pop.data <- as.numeric( c( phoenix.pop,( phoenix.pop[4] + phoenix.pop[4] - phoenix.pop[3] ) ) )
+
+# now, calculate the crime rate. Crime rate is calculated as the count of crimes divided by the population size, then multipled by 100,000.
+
+crime.rates <- as.data.frame( crimes.by.month )
+
+for (i in 1:5){
+ crime.rates[,i] <- ( crime.rates[,i] / phoenix.pop.data[i] ) * 100000
+}
+
+# Create the time series.
+monthly.crime.rate.by.year <- ts(
+  matrix( as.matrix( crime.rates ), ncol = 1 ), start=c( 2016, 1 ), end=c( 2020, 12 ), frequency=12
+  )
+
+monthly.crime.rate.by.year %>% 
+  ggseasonplot(
+   year.labels=FALSE,
+   main = "Plot of Monthly Crime Rate by Years for Phoenix" ) + 
+  theme_gray() 
+
+```
+
+Well, how does the population change matter? Let's take a look at the counts and the rates together. Note that to get these together, we need to use the `grid.arrange()` function in the `gridExtra` package.
+
+```{r, echo = FALSE, eval = TRUE}
+library(gridExtra)
+
+p1 <- monthly.crimes.by.year %>% 
+  ggseasonplot(
+   year.labels=FALSE,
+   main = "Plot of Monthly Crime Count by Years for Phoenix" ) + 
+  theme_gray() 
+
+p2 <- monthly.crime.rate.by.year %>% 
+  ggseasonplot(
+   year.labels=FALSE,
+   main = "Plot of Monthly Crime Rate by Years for Phoenix" ) + 
+  theme_gray() 
+
+grid.arrange(p1, p2, ncol = 1)
+
+```
+
+There is little change in the plot when we adjust for population differences by year.
