@@ -65,10 +65,11 @@ crime.data <- na.omit( crime.data )
 Let's pull the most recent data for **crime incidents** from the site.
 
 ```{r, echo = FALSE, eval = TRUE}
+library(scales)
 n.cases <- dim( crime.data )[1]
 ```  
 
-The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r n.cases` crime incidents with complete data from 11/2015 to within a week of the current date.   
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r comma(n.cases)` crime incidents with complete data from 11/2015 to within a week of the current date.   
 
 #### Getting the data (code)  
 ```{r, echo = TRUE, eval = FALSE}
@@ -143,9 +144,10 @@ crimes.by.day %>%
   ggplot( aes( days, counts ) ) +
   geom_line( color = "grey80" ) +
   geom_point( alpha = 1/5, color = "black" ) +
-  labs( x = "", y = "Counts of Crime per Day" ) +
+  labs( x = "", y = "Counts of Crime per Day" ) + 
   ggtitle( "Daily Crime Counts in Phoenix from Nov. 2015 to Sept. 2020" ) +
   geom_smooth( color = "darkblue", span = 0.2 ) +
+  scale_y_continuous(label = comma) +
   theme_minimal() 
 
 ```
@@ -184,6 +186,7 @@ monthly.crimes.by.year %>%
   ggseasonplot(
    year.labels=FALSE,
    main = "Plot of Monthly Crime Count by Years for Phoenix" ) + 
+  scale_y_continuous(label = comma) +
   theme_gray() 
 
 ```
@@ -246,6 +249,7 @@ monthly.crime.rate.by.year %>%
   ggseasonplot(
    year.labels=FALSE,
    main = "Plot of Monthly Crime Rate by Years for Phoenix" ) + 
+  scale_y_continuous(label = comma) +
   theme_gray() 
 
 ```
@@ -259,12 +263,14 @@ p1 <- monthly.crimes.by.year %>%
   ggseasonplot(
    year.labels=FALSE,
    main = "Plot of Monthly Crime Count by Years for Phoenix" ) + 
+   scale_y_continuous(label = comma) +
   theme_gray() 
 
 p2 <- monthly.crime.rate.by.year %>% 
   ggseasonplot(
    year.labels=FALSE,
    main = "Plot of Monthly Crime Rate by Years for Phoenix" ) + 
+  scale_y_continuous(label = comma) +
   theme_gray() 
 
 grid.arrange(p1, p2, ncol = 1)
