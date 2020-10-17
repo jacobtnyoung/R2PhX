@@ -22,7 +22,11 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
-#### [Crime Incidents, Calls for Service, and Police Shootings](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)
+#### [Why look at crime incidents using the portal?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)  
+
+<br>
+
+#### [Are incidents of crime increasing in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
 
 <br>
 
