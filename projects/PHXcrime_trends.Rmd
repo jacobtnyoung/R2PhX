@@ -1,5 +1,5 @@
 ---
-title: "Is crime increasing in Phoenix?"
+title: "What is going on with crime in Phoenix?"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   html_document:
@@ -24,32 +24,19 @@ rm(list = ls())
 
 <br>
 
-What do you think? Is crime on the rise? Is crime declining? Having a hard time answering that question (**and** *being confident about your answer*)? Well, you should? I certainly do (and I am a criminologist).  
+What do you think? Is crime on the rise? Is crime declining? Having a hard time answering that question (**and** *being confident about your answer*)? Well, you should! I certainly do (and [I am a criminologist](https://jacobtnyoung.github.io/)).  
 
 <br>
 
-And so are most people. [Gallup polling](https://news.gallup.com/poll/268283/describe-problem-crime-serious.aspx) has consistently shown that individuals' perceptions of crime does not (REPEAT **does not**) track trends in crime.  
+But, so are most people. [Gallup polling](https://news.gallup.com/poll/268283/describe-problem-crime-serious.aspx) has consistently shown that individuals' perceptions of crime does not (REPEAT **does not**) track trends in crime.  
+As I discuss in a [different post](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html), crime trends are **very** difficult to assess, without seeing the data, because of the peculiar nature of crime and the huge delay in reporting of crime (because of the way it is collected). 
 
-As I discuss in a [different post](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html), crime trends are **very** difficult to assess, without seeing the data, because of the peculiar nature of crime. 
-
-<br>
-
-**But**, if you want to know about crime in Phoenix, there is the open data portal! Specifically, there are three files that pertain to the ["police" topic](https://www.phoenixopendata.com/organization/police-department):  
-
- *  [Officer Involved Shooting Incidents](https://www.phoenixopendata.com/dataset/officer-involved-shooting-incidents)  
- 
- *  [Calls for Service](https://www.phoenixopendata.com/dataset/calls-for-service)  
- 
- * And [Crime Incidents](https://www.phoenixopendata.com/dataset/crime-data)  
-
-<br> 
- 
-For both the [Calls for Service](https://www.phoenixopendata.com/dataset/calls-for-service) and the [Crime Incidents](https://www.phoenixopendata.com/dataset/crime-data) data, the city updates the files at 11am every day. The files contains data beginning November 2015 up to 7 days before the posting date.
+However, if we want to know what is going on with crime in Phoenix, we can take a look at the [Crime Incidents](https://www.phoenixopendata.com/dataset/crime-data) data from the [data portal](https://www.phoenixopendata.com/). The city updates the file at 11am every day and it contains data beginning November 2015 up to 7 days before the posting date.
 
 <br><br>
 
 
-### To the Data!
+### To the Data! {.tabset}
 
 <br>
 
