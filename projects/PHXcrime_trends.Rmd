@@ -1,9 +1,13 @@
 ---
-title: "What's going on with crime in Phoenix?"
+title: "Is crime increasing in Phoenix?"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   html_document:
     theme: yeti
+    toc: false
+    toc_float: false
+    collapsed: false
+    smooth_scroll: false
 ---
 
 ```{r setup, include=FALSE}
@@ -26,13 +30,7 @@ What do you think? Is crime on the rise? Is crime declining? Having a hard time 
 
 And so are most people. [Gallup polling](https://news.gallup.com/poll/268283/describe-problem-crime-serious.aspx) has consistently shown that individuals' perceptions of crime does not (REPEAT **does not**) track trends in crime.  
 
-Crime trends are **very** difficult to assess, without seeing the data, because of the peculiar nature of crime. 
-
-  * First, crime is very concentrated in specific geographic areas and exposure to crime and victimization is disproportionately concentrated among groups. If you are fortunate enough to not experience victimization, then your assessment of the frequency of events probably comes from hearsay or media accounts. These are both "*biased*" accounts in the sense that they do not reflect representative cases of crime. In other words, we tend to hear about things that happen and don't really hear about when things don't happen.  
-
-  * Second, when individuals do experience victimization, they tend to overestimate the prevalence of crime. This makes intuitive sense, but makes it difficult to assess the actual prevalence of crime.  
-
-  * Third, we measure crime very poorly. There is often a large time gap between when crime happens and when those data are compiled into annual reports of crime. 
+As I discuss in a [different post](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html), crime trends are **very** difficult to assess, without seeing the data, because of the peculiar nature of crime. 
 
 <br>
 
