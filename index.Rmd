@@ -20,6 +20,10 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 *This* site uses the data from the [data portal](https://www.phoenixopendata.com/) to examine various topics (see below). For each topic, there are a set of questions that are examined using data from the portal. **Enjoy!**
 
+<br><br>
+
+### **Questions/Topics**  
+
 <br>
 
 #### [Why look at crime incidents using the portal?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)  

@@ -58,7 +58,9 @@ So, given the issues with the way government collects information on crime and t
 
 <br>
 
-#### [Are incidents of crime increasing in  Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
+<p align="center">
+[Back to R 2 Phoenix page](https://jacobtnyoung.github.io/R2PhX/)
+</p>
 
 <br>
 
