@@ -110,9 +110,15 @@ shooting.data$month  <- format( date.vec, format="%B" )
 
 <br>
 
-### Monthly Officer Involved Shooting Incidents {.tabset}
+###  {.tabset}
 
-As a first step, let's take a look at the monthly occurrence of officer involved shootings.   
+#### Monthly Incidents
+
+<br>
+
+As a first step, let's take a look at the monthly occurrence of officer involved shootings. The plot shows the monthly count of officer involved shootings from January, 2017 to `r format(Sys.time(), '%B, %Y')`. 
+
+<br>
 
 ```{r, echo = FALSE, eval = TRUE}
 
@@ -148,7 +154,9 @@ monthly.shootings.by.year %>%
 
 ```
 
-The plot shows the month count of officer involved shootings for the years 2017-2020. The plot shows several interesting patterns:  
+<br>
+
+The plot shows several interesting patterns:  
 
   + First, there are months throughout the years in which there are no shootings. In fact, there are `r length( which( shootings.by.month == 0 ) )` months in the data in which there are no shootings.  
   
@@ -157,7 +165,9 @@ The plot shows the month count of officer involved shootings for the years 2017-
   + Third, 2020 does not deviate from the other years in the data. Specifically, there were `r sum( shootings.by.month$"2020" )` officer involved shootings in 2020. For 2017, 2018, and 2019, there were `r sum( shootings.by.month$"2017" )`, `r sum( shootings.by.month$"2019" )`, and `r sum( shootings.by.month$"2019" )` officer involved shootings, respectively. 
 
 
-### Monthly Incidents (code)
+#### (code)
+
+<br>
 
 ```{r, echo = TRUE, eval = FALSE}
 
@@ -195,36 +205,14 @@ monthly.shootings.by.year %>%
 
 
 
+###
 
+<br>
 
+<p align="center">
+[Back to R 2 Phoenix page](https://jacobtnyoung.github.io/R2PhX/)
+</p>
 
+<br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***
