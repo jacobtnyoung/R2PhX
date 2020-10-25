@@ -203,7 +203,75 @@ monthly.shootings.by.year %>%
 
 ```
 
+<br>
 
+###  {.tabset}
+
+#### Suspect Characteristics
+
+<br>
+
+Additionally, we can examine the characteristics of the individuals who are shot. In the data, there are several variables for "suspect characteristics".  
+
+There are a few interesting features of the data:  
+
+  + Of the `r sum( shootings.by.month)` shootings, `r table( shooting.data$FATALITY_FLG)[1]` were fatal, a proportion of `r table( shooting.data$FATALITY_FLG)[1] / sum( shootings.by.month)`.
+  
+  + Whites account for the majority of cases, with a proportion of `r round( ( table( shooting.data$SP_RACE[shooting.data$SP_RACE == "White"] ) / sum( shootings.by.month ) ), 2 )`. 
+
+The plot below shows the frequency distribution (i.e. counts) of shootings by age, outcome (where red is a fatality), and faceted by whether the suspect is White or Non-White. 
+
+<br>
+
+
+```{r, echo = FALSE, eval = TRUE}
+
+# Create a plot with race, age, and the outcome.
+ggplot(
+  shooting.data %>% 
+  select( SP_RACE, SP_AGE_AT_INC, FATALITY_FLG ) %>% 
+  mutate( sp_wnw = ifelse( SP_RACE != "White", "Non-White", "White" ) ) %>%
+  mutate( SP_AGE_AT_INC = replace( SP_AGE_AT_INC, SP_AGE_AT_INC == 120, 12 ) ) %>% 
+  group_by( sp_wnw, SP_AGE_AT_INC, FATALITY_FLG ) %>% 
+  summarize( counts = n() ) ) +
+ geom_col( aes( SP_AGE_AT_INC, counts, fill = FATALITY_FLG ) ) +
+ facet_wrap( ~sp_wnw ) +
+ labs( x = "Suspect Age" ) +
+ labs( fill = "Outcome of Shooting" ) +
+ scale_fill_manual(values = c("#ca0222", "#02677b")) +
+ labs( title = "Plot of Suspect Age, Suspect Race, and Outcome for Officer Involved Shootings in Phoenix" ) +
+ theme_gray() 
+
+```
+
+<br>
+
+
+<br>
+
+#### (code)
+
+<br>
+
+```{r, echo = TRUE, eval = FALSE}
+
+# Create a plot with race, age, and the outcome.
+ggplot(
+  shooting.data %>% 
+  select( SP_RACE, SP_AGE_AT_INC, FATALITY_FLG ) %>% 
+  mutate( sp_wnw = ifelse( SP_RACE != "White", "Non-White", "White" ) ) %>%
+  mutate( SP_AGE_AT_INC = replace( SP_AGE_AT_INC, SP_AGE_AT_INC == 120, 12 ) ) %>% 
+  group_by( sp_wnw, SP_AGE_AT_INC, FATALITY_FLG ) %>% 
+  summarize( counts = n() ) ) +
+ geom_col( aes( SP_AGE_AT_INC, counts, fill = FATALITY_FLG ) ) +
+ facet_wrap( ~sp_wnw ) +
+ labs( x = "Suspect Age" ) +
+ labs( fill = "Outcome of Shooting" ) +
+ scale_fill_manual(values = c("#ca0222", "#02677b")) +
+ labs( title = "Plot of Suspect Age, Suspect Race, and Outcome for Officer Involved Shootings in Phoenix" ) +
+ theme_gray() 
+
+```
 
 ###
 
