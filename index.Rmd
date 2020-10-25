@@ -34,7 +34,7 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
-#### [Are police officer invovled shootings increasing in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
+#### [Are police shootings by police officers increasing in Phoenix? (and other questions...)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
 
 <br>
 
