@@ -314,7 +314,7 @@ If you just said, **BUT** these are counts and do not reflect population differe
 
 Let's pull it in and get the data for Phoenix.
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, echo = TRUE, eval = TRUE}
 library(openxlsx)
 
 # get the data.
@@ -339,7 +339,7 @@ phoenix.pop
 
 Ok! We have our population data. But, what about 2020? It is not reported yet. So, we need to fill that in. We could do this various ways, but for ease, let's just add the difference in growth from 2018 to 2019. 
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, echo = TRUE, eval = TRUE}
 
 # now, lets create a vector for population and add it to your object.
 phoenix.pop.data <- as.numeric( c( phoenix.pop,( phoenix.pop[4] + phoenix.pop[4] - phoenix.pop[3] ) ) )
@@ -368,7 +368,7 @@ monthly.crime.rate.by.year %>%
 
 Well, how does the population change matter? Let's take a look at the counts and the rates together. Note that to get these together, we need to use the `grid.arrange()` function in the `gridExtra` package.
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, echo = TRUE, eval = TRUE}
 library(gridExtra)
 
 p1 <- monthly.crimes.by.year %>% 
