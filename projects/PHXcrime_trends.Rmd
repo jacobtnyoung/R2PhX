@@ -255,7 +255,7 @@ monthly.crimes.by.year %>%
 
 <br>
 
-This plot reinforces what we observed in the plot above. Mainly, that the trend for 2019 is *unusual* relative to other years. 
+This plot reinforces what we observed in the plot above. Mainly, that the trend for 2020 is *unusual* relative to other years. 
 
 <br>
 
