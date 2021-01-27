@@ -24,7 +24,7 @@ rm(list = ls())
 
 <br>
 
-There is a data portal for crime in Phoenix, so what? Well, if you are interested in understanding current trends in public safety, then keep reading!
+There is a data portal for crime in Phoenix! So what. **SO WHAT!?** Well, if you are interested in understanding current trends in public safety, then you should keep reading!
 
 Crime trends are **very** difficult to assess, without seeing the data, because of the peculiar nature of crime. 
 
@@ -36,13 +36,13 @@ Crime trends are **very** difficult to assess, without seeing the data, because 
 
 <br>
 
-**But**, if you want to know about crime in Phoenix, there is the open data portal! Specifically, there are three files that pertain to the ["police" topic](https://www.phoenixopendata.com/organization/police-department):  
+**But**, if you want to know about crime in Phoenix, there is the open data portal! (That is the answer to your 'so what?' inquiry above.) Specifically, there are three files that pertain to the ["police" topic](https://www.phoenixopendata.com/organization/police-department):  
 
  *  [Officer Involved Shooting Incidents](https://www.phoenixopendata.com/dataset/officer-involved-shooting-incidents)  
  
  *  [Calls for Service](https://www.phoenixopendata.com/dataset/calls-for-service)  
  
- * And [Crime Incidents](https://www.phoenixopendata.com/dataset/crime-data)  
+ *  [Crime Incidents](https://www.phoenixopendata.com/dataset/crime-data)  
 
 <br> 
  
