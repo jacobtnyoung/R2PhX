@@ -32,6 +32,7 @@ library( dplyr )
 library( tidyr )
 library( ggplot2 )
 library( forecast )
+library( numform )
 
 
 # Get the data.
@@ -53,7 +54,8 @@ crime.data$month  <- format( date.vec, format="%B" )
 crimes.by.month <-
   crime.data %>% 
   select( year, month ) %>%   
-  filter( year != 2015 ) %>%  
+  filter( year != 2015 ) %>%
+  filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
@@ -61,22 +63,23 @@ crimes.by.month <-
 crimes.by.month$month <-factor( crimes.by.month$month,levels = month.name )
 crimes.by.month$month <-factor( month.abb[crimes.by.month$month],levels = month.abb )
 
-
 # Create crimes by type by month object.
 crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
+  filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 
   arrange( match( month, month.name ) ) %>% 
-  select( !month )
+  select( !month ) %>% 
 crimes.type.by.month$month <-factor( crimes.type.by.month$month,levels = month.name )
 crimes.type.by.month$month <-factor( month.abb[crimes.type.by.month$month],levels = month.abb )
 
-
 ```
+
+!!!HERE: need to figure out how to shorten the crime type names
 
 
 <br>
@@ -111,7 +114,9 @@ crimes.by.month %>%
   ggplot( aes( month, counts, group = 1 ) ) +
   geom_point( ) +
   geom_line( ) +
-  facet_grid( ~ year , scales="free" )
+  facet_grid( ~ year , scales="free" ) +
+  theme( axis.text.x=element_blank() ) +
+  xlab( "Month" )
 
 ```
 
@@ -124,7 +129,9 @@ crimes.type.by.month %>%
   ggplot( aes( month, counts, group = 1 ) ) +
   geom_point( ) +
   geom_line( ) +
-  facet_grid( UCR.CRIME.CATEGORY ~ year, scales="free" )
+  facet_grid( UCR.CRIME.CATEGORY ~ year, scales="free" ) +
+  theme( axis.text.x=element_blank() ) +
+  xlab( "Month" )
 
 ```
 
