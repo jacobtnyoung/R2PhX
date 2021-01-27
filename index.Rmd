@@ -30,7 +30,11 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
-#### [Are incidents of crime increasing in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
+#### [What is going on with crime in Phoenix? (well, let's look!)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
+
+<br>
+
+#### [What is going on with crime **types** in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
 
 <br>
 
