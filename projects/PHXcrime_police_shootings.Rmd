@@ -215,7 +215,7 @@ Additionally, we can examine the characteristics of the individuals who are shot
 
 There are a few interesting features of the data:  
 
-  + Of the `r sum( shootings.by.month)` shootings, `r table( shooting.data$FATALITY_FLG)[1]` were fatal, a proportion of `r table( shooting.data$FATALITY_FLG)[1] / sum( shootings.by.month)`.
+  + Of the `r sum( shootings.by.month)` shootings, `r table( shooting.data$FATALITY_FLG)[1]` were fatal, a proportion of `r round( table( shooting.data$FATALITY_FLG)[1] / sum( shootings.by.month), 2 )`.
   
   + Whites account for the majority of cases, with a proportion of `r round( ( table( shooting.data$SP_RACE[shooting.data$SP_RACE == "White"] ) / sum( shootings.by.month ) ), 2 )`. 
 
