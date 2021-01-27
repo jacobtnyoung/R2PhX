@@ -127,7 +127,7 @@ crimes.by.day %>%
   geom_line( color = "grey80" ) +
   geom_point( alpha = 1/5, color = "black" ) +
   labs( x = "", y = "Counts of Crime per Day" ) + 
-  ggtitle( "Daily Crime Counts in Phoenix from Nov. 2015 to Sept. 2020" ) +
+  ggtitle( "Daily Crime Counts in Phoenix, AZ" ) +
   geom_smooth( color = "darkblue", span = 0.2 ) +
   scale_y_continuous(label = comma) +
   theme_minimal() 
