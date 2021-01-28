@@ -34,7 +34,7 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
-#### [What is going on with crime **types** in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
+#### [(More on) What is going on with crime (**types**) in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
 
 <br>
 
