@@ -58,10 +58,20 @@ So, given the issues with the way government collects information on crime and t
 
 <br>
 
-<p align="center">
-[Back to R 2 Phoenix page](https://jacobtnyoung.github.io/R2PhX/)
-</p>
-
+#### Let's see it in action! *Check out*:
 <br>
 
-###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***
+#### [What is going on with crime in Phoenix? (well, let's look!)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
+<br>
+
+#### [(More on) What is going on with crime (**types**) in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
+<br>
+
+#### [Are police shootings by police officers increasing in Phoenix? (and other questions...)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
+<br>
+
+#### [*OR, head back to R 2 Phoenix page*](https://jacobtnyoung.github.io/R2PhX/)
+<br>
+
+***Last updated `r format(Sys.time(), '%d %B, %Y')`***
+<br>
