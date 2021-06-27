@@ -139,7 +139,7 @@ shootings.by.month[ is.na( shootings.by.month ) == TRUE ] <- 0
 monthly.shootings.by.year <- ts(
   matrix( as.matrix( shootings.by.month ), ncol = 1 ), 
   start=c( 2017, 1 ), 
-  end=c( as.numeric( tail( names( crimes.by.month ), n=1 ) ), 12 ), 
+  end=c( as.numeric( tail( names( shootings.by.month ), n=1 ) ), 12 ), 
   frequency=12
 )
 
@@ -161,11 +161,13 @@ monthly.shootings.by.year %>%
 
 The plot shows several interesting patterns:  
 
-  + First, there are months throughout the years in which there are no shootings. In fact, there are `r length( which( shootings.by.month == 0 ) )` months in the data in which there are no shootings.  
+  + First, there are multiple months throughout the years in which there are no shootings.    
   
-  + Second, April 2018 sticks out as there were `r max( shootings.by.month )` in that month. 
+  + Second, April 2018 and December 2020 both stick out as unusual in that there were `r max( shootings.by.month )` in each of these months. 
   
-  + Third, 2020 does not deviate from the other years in the data. Specifically, there were `r sum( shootings.by.month$"2020" )` officer involved shootings in 2020. For 2017, 2018, and 2019, there were `r sum( shootings.by.month$"2017" )`, `r sum( shootings.by.month$"2019" )`, and `r sum( shootings.by.month$"2019" )` officer involved shootings, respectively. 
+  + Third, 2020 is an unusual year in terms of trends. Beginning in August, there is a consistent increase until December. There were `r sum( shootings.by.month$"2020" )` officer involved shootings in 2020. For 2017, 2018, and 2019, there were `r sum( shootings.by.month$"2017" )`, `r sum( shootings.by.month$"2019" )`, and `r sum( shootings.by.month$"2019" )` officer involved shootings, respectively. So, for 2020, there were nearly twice as many officer involved shootings.  
+  
+  + Fourth, 2021 shows a decline in the first half.
 
 
 #### (code)
