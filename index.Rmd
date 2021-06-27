@@ -30,6 +30,10 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
+#### [What 'went down' with crime in Phoenix in 2020?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types_2020.html)
+
+<br>
+
 #### [What is going on with crime in Phoenix? (well, let's look!)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
 
 <br>
