@@ -41,7 +41,6 @@ crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
 crime.data <- na.omit( crime.data )
 
 
-
 crime.data$City <- rep( "Phoenix", dim( crime.data )[1] )
 crime.data$State <- rep( "Arizona", dim( crime.data )[1] )
 
