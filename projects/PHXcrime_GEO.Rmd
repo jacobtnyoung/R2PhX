@@ -84,6 +84,37 @@ var_names <- c( "id", "input_address",
 var_names <- paste(var_names, collapse=',')
 writeLines( text=c(var_names, content(resp)), con="ResultsDemo.csv" )
 
+# loading the results we wrote
+res <- read.csv( "ResultsDemo.csv", header=TRUE, stringsAsFactors=FALSE, colClasses="character" )
+
+# Splitting Latitude and longitude coordinates
+lat.lon <- strsplit( res$lat_lon, "," )
+
+for( i in 1:length(lat.lon) )
+  {
+  if( length( lat.lon[[i]] ) < 2 )
+  lat.lon[[ i ]] <- c(NA,NA) 
+  }
+
+m <- matrix( unlist( lat.lon ), ncol=2, byrow=T )
+colnames(m) <- c("lon","lat")
+m <- as.data.frame( m )
+
+res <- cbind( res, m )
+head( res )
+
+# writing results with splitted lat lon in another file
+write.csv( res, "/Users/jyoung20/Desktop/ResultsDemo2.csv", row.names=FALSE )
+
+pander( head( res ) ) 
+
+crime.data$input_address <- crime.data$X100.BLOCK.ADDR
+
+npo.main <- left_join(crime.data, res, by = "input_address")
+
+
+HERE: need to batch these
+
 ```
 
 
