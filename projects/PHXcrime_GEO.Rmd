@@ -74,6 +74,7 @@ resp <- POST( apiurl,
               encode = "multipart" 
 )
 
+
 # Writing results in a csv using writelines function
 var_names <- c( "id", "input_address", 
                 "match", "match_type", 
@@ -114,6 +115,9 @@ npo.main <- left_join(crime.data, res, by = "input_address")
 
 
 HERE: need to batch these
+
+
+The issue I am running into is that there are not many matches due to the addresses being xd out.
 
 ```
 
