@@ -46,4 +46,8 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
+#### [When it's hot in Phoenix, do people go to the heat shelter? Let's take a look!](https://jacobtnyoung.github.io/R2PhX/projects/PHX_heat_shelter_2020.html)
+
+<br>
+
 ###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***

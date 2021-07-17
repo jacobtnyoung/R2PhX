@@ -1,0 +1,157 @@
+---
+title: "Are Heat Shelter Attendance and Temperature in Phoenix Correlated? (2020)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: yeti
+    toc: false
+    toc_float: false
+    collapsed: false
+    smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 12, 
+                      fig.height = 10)
+
+rm(list = ls())
+
+```
+
+<style>
+body {
+text-align: justify}
+</style>
+
+<br>
+
+2020 was a hot one in Phoenix, to put it mildly. Fortunately, many organizations provide "heat relief shelters". *Also*, the city publishes data on attendence at these shelters through the open [data](https://www.phoenixopendata.com/) portal. So, the question naturally arises: when it gets hot, are people more likely to attend the shelters? *To the data!*  
+
+<br> 
+
+The "Phoenix Heat Relief Shelter Attendance - 2020" data file is a dataset providing Phoenix heat shelter attendance counts and high daily temperature by day for May 29, 2020 through September 30, 2020.
+
+<br>
+
+```{r, echo = TRUE, eval = TRUE}
+
+# Here are the packages we will use.
+# If you do not have them, be sure to use the install.packages() function.
+
+library( dplyr )
+library( tidyr )
+library( ggplot2 )
+library( RColorBrewer )
+
+# Get the data.
+url <- "https://www.phoenixopendata.com/dataset/83b4f963-6547-4fbc-b949-378fe901f063/resource/5c256353-7774-40b4-a414-195be909a200/download/heat.csv"
+heat.data <- read.csv( url, as.is = TRUE, header = TRUE )
+
+```
+
+```{r, echo = FALSE, eval = TRUE}
+
+# Help with formating the text.
+library(scales)
+n.cases <- dim( heat.data )[1]
+
+# create the date object here because it gets used in the first plot.
+report.date <- seq( as.Date( "2020-05-29" ), by = "1 day", length.out = n.cases ) 
+
+```
+
+<br>
+
+
+The correlation coefficient between attendance and high temperature is `r round( cor( heat.data$HIGH_TEMP, heat.data$DAILY_CNT ), 2 )`. Suprisingly small. Let's take a look at a plot of the two variables.
+
+<br>
+
+```{r, echo=TRUE, eval=TRUE}
+
+# First, let's use the date to color the plot.
+report.date <- seq( as.Date( "2020-05-29" ), by = "1 day", length.out = n.cases ) 
+
+# Now, let's plot it!
+ggplot( heat.data, aes( x = HIGH_TEMP, y = DAILY_CNT ) ) + 
+  geom_point( size = 4, aes( colour = report.date ) ) +
+  geom_smooth( method = lm, se = FALSE, colour = "firebrick3" ) +
+  ylab( "Shelter Attendance" ) + xlab( "Daily High Temperature" ) +
+  theme_bw()
+
+```
+
+<br>
+
+This is somewhat surprising, as you would expect attendance to be correlated with the high temperature. That is, on hotter days more people go to the heat shelter. What the plot above does not show, however, is any reference point for time. 
+
+The plot colors the points by date such that earlier dates are darker (e.g. June) and later dates are lighter (e.g. September). As the plot shows, the dates in the earlier part of 2020 are clustered at the bottom (relatively low attendance), even though these were some of the hottests days. *Note that the hottest day was July 20th and reached `r max(heat.data$HIGH_TEMP)`. It was a **scorcher**!*
+
+<br>
+
+To better visualize the relationship with calendar date, let's plot temperature and attendance as a time series. The first date is listed as May 29th. We will start the plot there.
+
+<br>
+
+```{r, echo=FALSE, eval=TRUE}
+
+report.date <- seq( as.Date( "2020-05-29" ), by = "1 day", length.out = n.cases ) 
+
+ggplot( ) +
+  geom_line( aes( x = report.date, y = heat.data$HIGH_TEMP ), group = 1, color = "#D55E00" ) + 
+  geom_line( aes( x = report.date, y = heat.data$DAILY_CNT ), group = 2, color = "#56B4E9" ) + 
+  ylab( "Daily High Temperature/Shelter Attendance Values" ) + xlab( "Date" ) +
+  scale_x_date( date_labels = "%b" ) + 
+  theme_bw()
+
+```
+
+<br>
+
+This plot shows a different picture. :)  
+
+Mainly, that temperatures fluctuated between a minimum of `r min( heat.data$HIGH_TEMP )` and a maximimum of `r max( heat.data$HIGH_TEMP )` between June and September (with an average of **`r mean( heat.data$HIGH_TEMP )`**!!!). *But*, the more important aspect of the data is that attendance rises throughout the year, and does not really track with a rise in temperature.  
+
+*Note that these are different metrics: degrees vs. counts. But, they are not **that** different as to distort comparison.*  
+
+<br>
+
+This leads to the question of why? What was going on?  
+
+Part of this has to do with the surge in COVID-19 cases in July that, perhaps, deterred individuals from attending. (Although, I am skeptical of that explanation).  
+
+Another reason might be that there were more shelters later in the year. That is, in June and July, when COVID-19 cases were skyrocketing, some shelters closed, capping the availability. But, as case counts declined, more shelters opened. 
+
+<br>
+
+I will think on this more...
+
+<br>
+
+<p align="center">
+![](https://media.giphy.com/media/a5viI92PAF89q/giphy.gif){width=200px height=200px}
+</p>
+
+
+
+<br>
+
+###
+
+<br>
+
+<p align="center">
+[Back to R 2 Phoenix page](https://jacobtnyoung.github.io/R2PhX/)
+</p>
+
+<br>
+
+<p align="center">
+***Last updated `r format(Sys.time(), '%d %B, %Y')`***
+</p>
+
+<br>
