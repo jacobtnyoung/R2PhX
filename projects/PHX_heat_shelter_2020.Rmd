@@ -126,7 +126,7 @@ z.cnt <- ( ( heat.data$DAILY_CNT - mean( heat.data$DAILY_CNT ) ) ) / sd( heat.da
 ggplot( ) +
   geom_line( aes( x = report.date, y = z.temp ), group = 1, color = "#D55E00" ) + 
   geom_line( aes( x = report.date, y = z.cnt ), group = 2, color = "#56B4E9" ) + 
-  ylab( "Daily High Temperature/Shelter Attendance Values" ) + xlab( "Date" ) +
+  ylab( "Daily High Temperature/Shelter Attendance Values (Standarized)" ) + xlab( "Date" ) +
   scale_x_date( date_labels = "%b" ) + 
   theme_bw()
 
