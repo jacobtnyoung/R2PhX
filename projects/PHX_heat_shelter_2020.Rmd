@@ -97,9 +97,7 @@ To better visualize the relationship with calendar date, let's plot temperature 
 
 <br>
 
-```{r, echo=FALSE, eval=TRUE}
-
-report.date <- seq( as.Date( "2020-05-29" ), by = "1 day", length.out = n.cases ) 
+```{r, echo=TRUE, eval=TRUE}
 
 ggplot( ) +
   geom_line( aes( x = report.date, y = heat.data$HIGH_TEMP ), group = 1, color = "#D55E00" ) + 
@@ -117,6 +115,22 @@ This plot shows a different picture. :)
 Mainly, that temperatures fluctuated between a minimum of `r min( heat.data$HIGH_TEMP )` and a maximimum of `r max( heat.data$HIGH_TEMP )` between June and September (with an average of **`r mean( heat.data$HIGH_TEMP )`**!!!). *But*, the more important aspect of the data is that attendance rises throughout the year, and does not really track with a rise in temperature.  
 
 *Note that these are different metrics: degrees vs. counts. But, they are not **that** different as to distort comparison.*  
+
+But to be sure, how about we check out the standardized scores for these two variables to examine their covariance over time.
+
+```{r, echo=TRUE, eval=TRUE}
+
+z.temp <- ( ( heat.data$HIGH_TEMP - mean( heat.data$HIGH_TEMP ) ) ) / sd( heat.data$HIGH_TEMP )
+z.cnt <- ( ( heat.data$DAILY_CNT - mean( heat.data$DAILY_CNT ) ) ) / sd( heat.data$DAILY_CNT )
+
+ggplot( ) +
+  geom_line( aes( x = report.date, y = z.temp ), group = 1, color = "#D55E00" ) + 
+  geom_line( aes( x = report.date, y = z.cnt ), group = 2, color = "#56B4E9" ) + 
+  ylab( "Daily High Temperature/Shelter Attendance Values" ) + xlab( "Date" ) +
+  scale_x_date( date_labels = "%b" ) + 
+  theme_bw()
+
+```
 
 <br>
 
