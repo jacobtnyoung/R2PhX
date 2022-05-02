@@ -290,7 +290,9 @@ crimes.by.month <-
 
 # Now, lets use the ts() function to create a time series object.
 monthly.crimes.by.year <- ts(
-  matrix( as.matrix( crimes.by.month ), ncol = 1 ), start=c( 2016, 1 ), end=c( 2020, 12 ), frequency=12
+  matrix( as.matrix( crimes.by.month ), ncol = 1 ), 
+  start=c( 2016, 1 ), 
+  end=c( as.numeric( tail( names( crimes.by.month ), n=1 ) ), 12 ), frequency=12
 )
 
 ```
