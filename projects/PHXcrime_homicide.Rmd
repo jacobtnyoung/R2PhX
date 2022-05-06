@@ -34,7 +34,7 @@ library( dplyr )
 library( tidyr )
 library( ggplot2 )
 library( forecast )
-library( gridExtra )
+library( scales )
 
 # Get the data.
 url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
@@ -42,7 +42,6 @@ crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
 crime.data <- na.omit( crime.data )
 
 # Help with formating the text.
-library( scales )
 n.cases <- dim( crime.data )[1]
 
 # Clean up the dates.
@@ -50,12 +49,6 @@ date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
 crime.data$year   <- format( date.vec, format="%Y" )
 crime.data$month  <- format( date.vec, format="%B" )
 crime.data$day365 <- format( date.vec, format="%j" )
-
-# Drop cases for the most recent month.
-crime.data <- crime.data[ ! ( 
-  crime.data$month == format( Sys.Date(), format="%B" ) &
-  crime.data$year == format( Sys.Date(), format="%Y" ) 
-  ) , ]
 
 # Clean up the variable classifying the cases.
 crime.data <- 
@@ -71,20 +64,19 @@ crime.data <-
     UCR.CRIME.CATEGORY == "RAPE" ~ "Rape",
     UCR.CRIME.CATEGORY == "ROBBERY" ~ "Robbery" ) )
 
+# Drop cases for the most recent month.
+crime.data <- crime.data[ ! ( 
+  crime.data$month == format( Sys.Date(), format="%B" ) &
+  crime.data$year == format( Sys.Date(), format="%Y" ) 
+  ) , ]
+
 # Select just the homicides.
 homicide.data <-
   crime.data %>% 
   filter( crime.type == "Homicide"  )
 
-# Recreate the date vector variable.
-date.vec <- strptime( homicide.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
-
-
-!!!STUCK HERE with getting this to run!!!
-
-
 # Create the object of homicides by day.
-crimes.by.day <- 
+homicides.by.day <- 
   homicide.data %>% 
   select( year, month, day365 ) %>%   
   filter( !is.na( day365 ) ) %>% 
@@ -93,66 +85,74 @@ crimes.by.day <-
   ungroup() %>% 
   mutate( day.time = seq( 1, length( counts ) ) ) %>% 
   select( counts, day.time ) %>% 
-  mutate( days = seq( as.Date( "2015/11/1" ), as.Date( tail( date.vec ) )[1], "days" ) ) %>% 
+  mutate( days = 
+            seq( 
+              as.Date( head( strptime( homicide.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" ) ) )[1], 
+              as.Date( tail( strptime( homicide.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" ) ) )[6], 
+              length.out = length( counts ) ) ) %>% 
   arrange( day.time )
 
-crimes.by.day <- as.data.frame( crimes.by.day )
+homicides.by.day <- as.data.frame( homicides.by.day )
 
-
-
-
-# Crimes by month.
-crimes.by.month <-
-  crime.data %>% 
+# Homicides by month.
+homicides.by.month <-
+  homicide.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
   arrange( match( month, month.name ) ) 
-crimes.by.month$month <-factor( crimes.by.month$month,levels = month.name )
-crimes.by.month$month <-factor( month.abb[crimes.by.month$month],levels = month.abb )
+homicides.by.month$month <-factor( homicides.by.month$month,levels = month.name )
+homicides.by.month$month <-factor( month.abb[homicides.by.month$month],levels = month.abb )
 
-# Create crimes by type by month object.
-crimes.type.by.month <-
-  crime.data %>% 
-  select( year, month, UCR.CRIME.CATEGORY ) %>%   
+
+!!!HERE: need to reconcile these!!!
+  What is differnet about them???
+  
+# Homicides by month.
+homicides.by.month2 <- 
+  homicide.data %>% 
+  select( year, month ) %>%   
   filter( year != 2015 ) %>%  
   filter( !is.na( year ) ) %>% 
-  group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
+  group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
+  spread( year, counts ) %>% 
   arrange( match( month, month.name ) ) %>% 
-  select( !month ) %>% 
-  mutate(crime.type = case_when(
-    UCR.CRIME.CATEGORY == "AGGRAVATED ASSAULT" ~ "Assault",
-    UCR.CRIME.CATEGORY == "ARSON" ~ "Arson",
-    UCR.CRIME.CATEGORY == "BURGLARY" ~ "Burglary",
-    UCR.CRIME.CATEGORY == "DRUG OFFENSE" ~ "Drugs",
-    UCR.CRIME.CATEGORY == "LARCENY-THEFT" ~ "Theft",
-    UCR.CRIME.CATEGORY == "MURDER AND NON-NEGLIGENT MANSLAUGHTER" ~ "Homicide",
-    UCR.CRIME.CATEGORY == "MOTOR VEHICLE THEFT" ~ "MV Theft",
-    UCR.CRIME.CATEGORY == "RAPE" ~ "Rape",
-    UCR.CRIME.CATEGORY == "ROBBERY" ~ "Robbery" ) )
-crimes.type.by.month$month <-factor( crimes.type.by.month$month,levels = month.name )
-crimes.type.by.month$month <-factor( month.abb[crimes.type.by.month$month],levels = month.abb )
+  select( !month )
 
-homicide.by.month <-
-  crimes.type.by.month %>% 
-  filter( crime.type == "Homicide"  )
+# Now, lets use the ts() function to create a time series object.
+monthly.homicides.by.year <- ts(
+  matrix( as.matrix( homicides.by.month2 ), ncol = 1 ), 
+  start=c( 2016, 1 ), 
+  end=c( as.numeric( tail( names( homicides.by.month2 ), n=1 ) ), 12 ), frequency=12
+)
+
+
+monthly.homicides.by.year %>% 
+  ggseasonplot(
+    year.labels=FALSE,
+    main = "Plot of Monthly Count of Homicides by Years for Phoenix" ) + 
+  scale_y_continuous(label = comma) +
+  theme_gray()
+
+
+!!!It would be cool to get some sort of bands of confidence around each of these or something.
+Also, the colors are not very useful.
+
 
 ```
 
 <br>
 
-TEXT HERE 
+TEXT HERE when you have something to say
 
 
 CLEAN UP HERE
 CLEAN UP HERE
 CLEAN UP HERE
 CLEAN UP HERE
-
-
 
 
 
@@ -160,7 +160,7 @@ CLEAN UP HERE
 
 <br><br>
 
-### Monthly Counts over the Years {.tabset}
+### Monthly Counts of **Homicide** over the Years {.tabset}
 
 <br>
 
@@ -170,15 +170,36 @@ CLEAN UP HERE
 
 Let's pull the most recent data for **crime incidents** from the site.
 
-The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r comma(n.cases)` crime incidents with complete data from 11/2015 to within a week of the current date.   
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r comma(n.cases)` crime incidents with complete data from 11/2015 to within a week of the current date.  
 
-Let's start by looking at the monthly count of incidents over all crime types.
+We will select just **homicides**. In the data, these appear as `MURDER AND NON-NEGLIGENT MANSLAUGHTER`, but recoded as *homicide*.
+
+Let's start by looking at the monthly count.
   
 <br>
 
+```{r, echo = FALSE, eval = TRUE}
+
+homicides.by.day %>% 
+  ggplot( aes( days, counts ) ) +
+  geom_line( color = "grey80" ) +
+  geom_point( alpha = 1/5, color = "black" ) +
+  labs( x = "", y = "Counts of Homicides per Day" ) + 
+  ggtitle( "Daily Homicide Counts in Phoenix, AZ" ) +
+  geom_smooth( color = "darkblue", span = 0.2 ) +
+  scale_y_continuous(label = comma) +
+  theme_minimal() 
+
+```
+
+<br>
+
+
+
+
 ```{r, echo=FALSE, eval=TRUE}
 
-p1 <- crimes.by.month %>% 
+p1 <- homicides.by.month %>% 
   ggplot( aes( month, counts, group = 1 ) ) +
   geom_point( ) +
   geom_line( ) +
@@ -190,27 +211,7 @@ p1
 
 ```
 
-As the plot shows, there is a large drop in reported incidents from March 2020-June 2020 with an increase going into the end of 2020. The plot below shows these same counts broken down by type of incident reported.  
-
-<br>
-
-If we focus on 2020, we can see that the pronounced drop in reported incidents from March 2020-June 2020 is mainly driven by **Robbery** and **Theft**. 
-
-```{r, echo=FALSE, eval=TRUE}
-
-p2 <- crimes.type.by.month %>% 
-  ggplot( aes( month, counts, group = 1 ) ) +
-  geom_point( ) +
-  geom_line( ) +
-  facet_grid( crime.type ~ year, scales="free" ) +
-  theme( axis.text.x=element_blank(), 
-         strip.text.x = element_text( size = 15 ),
-         strip.text.y = element_text( size = 12 ) ) +
-  xlab( "Month" )
-
-p2
-
-```
+TEXT
 
 <br>
 
@@ -218,58 +219,8 @@ p2
 
 ```{r, echo = TRUE, eval = FALSE}
 
-library( dplyr )
-library( tidyr )
-library( ggplot2 )
-library( forecast )
-library( gridExtra )
+# UPDATE CODE HERE WITH WHAT YOU DID
 
-# Get the data.
-url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
-crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
-crime.data <- na.omit( crime.data )
-
-# Clean up the dates.
-date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
-crime.data$year   <- format( date.vec, format="%Y" )
-crime.data$month  <- format( date.vec, format="%B" )
-
-# Crimes by month.
-crimes.by.month <-
-  crime.data %>% 
-  select( year, month ) %>%   
-  filter( year != 2015 ) %>%
-  #filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
-  filter( !is.na( year ) ) %>% 
-  group_by( year, month ) %>% 
-  summarize( counts = n() ) %>% 
-  arrange( match( month, month.name ) ) 
-crimes.by.month$month <-factor( crimes.by.month$month,levels = month.name )
-crimes.by.month$month <-factor( month.abb[crimes.by.month$month],levels = month.abb )
-
-# Create crimes by type by month object.
-crimes.type.by.month <-
-  crime.data %>% 
-  select( year, month, UCR.CRIME.CATEGORY ) %>%   
-  filter( year != 2015 ) %>%  
-  #filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
-  filter( !is.na( year ) ) %>% 
-  group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
-  summarize( counts = n() ) %>% 
-  arrange( match( month, month.name ) ) %>% 
-  select( !month ) %>% 
-  mutate(crime.type = case_when(
-    UCR.CRIME.CATEGORY == "AGGRAVATED ASSAULT" ~ "Assault",
-    UCR.CRIME.CATEGORY == "ARSON" ~ "Arson",
-    UCR.CRIME.CATEGORY == "BURGLARY" ~ "Burglary",
-    UCR.CRIME.CATEGORY == "DRUG OFFENSE" ~ "Drugs",
-    UCR.CRIME.CATEGORY == "LARCENY-THEFT" ~ "Theft",
-    UCR.CRIME.CATEGORY == "MURDER AND NON-NEGLIGENT MANSLAUGHTER" ~ "Homicide",
-    UCR.CRIME.CATEGORY == "MOTOR VEHICLE THEFT" ~ "MV Theft",
-    UCR.CRIME.CATEGORY == "RAPE" ~ "Rape",
-    UCR.CRIME.CATEGORY == "ROBBERY" ~ "Robbery" ) )
-crimes.type.by.month$month <-factor( crimes.type.by.month$month,levels = month.name )
-crimes.type.by.month$month <-factor( month.abb[crimes.type.by.month$month],levels = month.abb )
 ```
 
 <br>
@@ -301,10 +252,6 @@ p2
 <br>
 
 
-
-```
-
-<br>
 
 ###
 

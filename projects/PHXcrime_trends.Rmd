@@ -50,6 +50,10 @@ crime.data$month  <- format( date.vec, format="%B" )
 crime.data$day365 <- format( date.vec, format="%j" )
 crime.data$week   <- format( date.vec, format="%V" )
 
+#!!!!SEE THE HOMICIDE FILE AS YOU CLEANED UP SOME OF THIS CODE!!!
+
+##!!!ALSO: The season plot is not a rate!!!
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Use dplyr() to create an object that is the daily count of crimes.
 crimes.by.day <- 
@@ -369,7 +373,7 @@ monthly.crime.rate.by.year <- ts(
 monthly.crime.rate.by.year %>% 
   ggseasonplot(
    year.labels=FALSE,
-   main = "Plot of Monthly Crime Rate by Years for Phoenix" ) + 
+   main = "Plot of Monthly Crime Count by Years for Phoenix" ) + 
   scale_y_continuous(label = comma) +
   theme_gray() 
 
