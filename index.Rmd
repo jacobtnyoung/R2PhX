@@ -22,32 +22,42 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br><br>
 
-### **Questions/Topics**  
+#### **Crime in Phoenix**  
 
 <br>
 
-#### [Why look at crime incidents using the portal?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)  
+##### [Why look at crime incidents using the portal?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime.html)  
 
 <br>
 
-#### [What 'went down' with crime in Phoenix in 2020?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types_2020.html)
+##### [What is going on with crime in Phoenix? (well, let's look!)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
 
 <br>
 
-#### [What is going on with crime in Phoenix? (well, let's look!)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html)
+##### [(More on) What is going on with crime (**types**) in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
 
 <br>
 
-#### [(More on) What is going on with crime (**types**) in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html)
+##### [Is **Homicide** on the rise in Phoenix?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_homicide.html)
 
 <br>
 
-#### [Are police shootings by police officers increasing in Phoenix? (and other questions...)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
+##### [What "went down" with crime in Phoenix in 2020?](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types_2020.html)
 
 <br>
 
-#### [When it's hot in Phoenix, do people go to the heat shelter? Let's take a look!](https://jacobtnyoung.github.io/R2PhX/projects/PHX_heat_shelter_2020.html)
+##### [Are police shootings by police officers increasing in Phoenix? (and other questions...)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
 
 <br>
+
+<br><br>
+
+#### **Other Questions/Topics**  
+
+<br>
+
+##### [When it's hot in Phoenix, do people go to the heat shelter? Let's take a look!](https://jacobtnyoung.github.io/R2PhX/projects/PHX_heat_shelter_2020.html)
+
+<br><br>
 
 ###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***

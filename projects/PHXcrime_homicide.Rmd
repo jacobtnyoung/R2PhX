@@ -94,24 +94,9 @@ homicides.by.day <-
 
 homicides.by.day <- as.data.frame( homicides.by.day )
 
-# Homicides by month.
-homicides.by.month <-
-  homicide.data %>% 
-  select( year, month ) %>%   
-  filter( year != 2015 ) %>%
-  filter( !is.na( year ) ) %>% 
-  group_by( year, month ) %>% 
-  summarize( counts = n() ) %>% 
-  arrange( match( month, month.name ) ) 
-homicides.by.month$month <-factor( homicides.by.month$month,levels = month.name )
-homicides.by.month$month <-factor( month.abb[homicides.by.month$month],levels = month.abb )
-
-
-!!!HERE: need to reconcile these!!!
-  What is differnet about them???
   
 # Homicides by month.
-homicides.by.month2 <- 
+homicides.by.month <- 
   homicide.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%  
@@ -121,6 +106,9 @@ homicides.by.month2 <-
   spread( year, counts ) %>% 
   arrange( match( month, month.name ) ) %>% 
   select( !month )
+#homicides.by.month$month <-factor( homicides.by.month$month,levels = month.name )
+#homicides.by.month$month <-factor( month.abb[homicides.by.month$month],levels = month.abb )
+
 
 # Now, lets use the ts() function to create a time series object.
 monthly.homicides.by.year <- ts(
@@ -140,6 +128,8 @@ monthly.homicides.by.year %>%
 
 !!!It would be cool to get some sort of bands of confidence around each of these or something.
 Also, the colors are not very useful.
+
+Need to go ahead and build in the rates
 
 
 ```
