@@ -1,5 +1,5 @@
 ---
-title: "What is going on with crime in Phoenix?"
+title: "What is going on with calls for service in Phoenix?"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   html_document:
@@ -36,12 +36,67 @@ library( openxlsx )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-# Crime incidents.
+# Calls for service.
 
-# get the crime incidents data file.
-url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
-crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
-crime.data <- na.omit( crime.data )
+### The download on this is large, so you have to set the timeout on these.
+
+# Check the time out for download.
+getOption( "timeout" )
+
+# Set the download timeout to be three minutes (180 seconds).
+options( timeout = 180 )
+
+### Because the main file is so large, I download each year file.
+
+url.set <- NULL
+
+url.set[1] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/d53e8f3f-2ce5-4e58-b03d-fe3721c9354e/download/calls-for-service2016-calls-for-servicecallsforsrvc2016.csv"
+
+url.set[2] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/14435329-45ff-4584-8eda-5218b52cca56/download/calls-for-service2017-calls-for-servicecallsforsrvc2017.csv"
+
+url.set[3] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/30a4d911-41a3-4d4a-a817-ade6f12b8131/download/callsforsrvc2018.csv"
+
+url.set[4] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/7edc831c-9167-41a9-9b7b-61a167cb9739/download/callsforsrvc2019.csv"
+
+url.set[5] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/3c0ae3ec-456f-45f4-801d-b8d6699ba32e/download/callsforsrvc2020.csv"
+
+url.set[6] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/33094536-e3b8-4634-a4a6-4e0daca4aa91/download/callsforsrvc2021.csv"
+
+url.set[7] <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/27963751-fe11-49ab-a0a8-627cd9338e17/download/callsforsrvc2022.csv"
+
+url.all <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/1d536ee6-7ffb-49c3-bffe-5cdd98a3c97e/download/callsforservice.csv"
+
+
+options( timeout = 360 )
+
+url.all <- "https://www.phoenixopendata.com/dataset/64a60154-3b2d-4583-8fb5-6d5e1b469c28/resource/1d536ee6-7ffb-49c3-bffe-5cdd98a3c97e/download/callsforservice.csv"
+
+
+calls.data <- read.csv( url.all, as.is = TRUE, header = TRUE )
+
+
+
+
+calls.data <- na.omit( calls.data )
+
+1. probably want to start by comparing the departmental report to the others.
+2. take the departmental reports as those I think are actual incidents?
+
+
+???
+  
+I think you should build a loop to pull the files together for each year, then basically repeat the analysis you did the for the crime trends file.  
+
+Here is the data variable: 
+
+date.vec <- strptime( calls.data$CALL_RECEIVED, format="%m/%d/%Y %H:%M" )
+crime.data$year   <- format( strptime( calls.data$CALL_RECEIVED, format="%m/%d/%Y %H:%M" ), format="%B" )
+  
+
+!!!HERE WITH CLEANUP!!!!
+
+
+
 
 # Help with formating the text.
 n.cases <- dim( crime.data )[1]

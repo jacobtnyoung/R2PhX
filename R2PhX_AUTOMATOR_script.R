@@ -10,6 +10,12 @@ render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/projects/PHXcrime_type
 render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/projects/PHX_heat_shelter_2020.Rmd", "html_document" )
 render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/projects/PHXcrime_police_shootings.Rmd", "html_document" )
 
+
+
+NEED TO ADD THE HOMICIDE FILE AND UPDATE ANY NAMES HERE!!!
+
+
+
 # This runs the index file.
 render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/index.Rmd", "html_document" )
 
