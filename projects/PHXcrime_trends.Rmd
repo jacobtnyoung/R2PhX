@@ -90,6 +90,14 @@ crimes.by.month <-
   arrange( match( month, month.name ) ) %>% 
   select( !month )
 
+# Crimes by year.
+crimes.by.year <- 
+  crime.data %>% 
+  select( year ) %>%   
+  filter( year != 2015 ) %>%  
+  filter( !is.na( year ) ) %>% 
+  group_by( year ) %>% 
+  summarize( counts = n() ) 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Population data for Phoenix.
@@ -130,6 +138,13 @@ for ( i in 1: dim( crime.rates )[2] ){
  crime.rates[,i] <- ( crime.rates[,i] / phoenix.pop.data[i] ) * 100000
 }
 
+# calculate the crime rate by year.
+crime.rates.year <- as.data.frame( crimes.by.year )
+
+for ( i in 1: dim( crime.rates.year )[1] ){
+ crime.rates.year[i,2] <- ( crime.rates.year[i,2] / phoenix.pop.data[i] ) * 100000
+}
+
 # Create the time series.
 monthly.crime.rate.by.year <- ts(
   matrix( as.matrix( crime.rates ), ncol = 1 ), 
@@ -159,6 +174,15 @@ monthly.crime.rate.by.year %>%
   scale_y_continuous( label = comma ) +
   geom_line( size = 1.2 ) +
   theme_gray()  
+
+crime.rates.year %>% 
+  ggplot( aes( year, counts ) ) +
+  geom_point( alpha = 1/5, color = "black" ) +
+  labs( x = "", y = "Rate of Crime per Year" ) + 
+  ggtitle( "Daily Crime Counts in Phoenix, AZ" ) +
+  geom_smooth( color = "darkblue", span = 0.2 ) +
+  scale_y_continuous(label = comma) +
+  theme_minimal() 
 
 ```
 

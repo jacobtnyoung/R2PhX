@@ -191,7 +191,7 @@ crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
-  #filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
+  filter( year != 2021 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 

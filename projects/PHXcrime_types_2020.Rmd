@@ -41,7 +41,7 @@ crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
 crime.data <- na.omit( crime.data )
 
 # Help with formating the text.
-library(scales)
+library( scales )
 n.cases <- dim( crime.data )[1]
 
 # Clean up the dates.
@@ -49,13 +49,18 @@ date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
 crime.data$year   <- format( date.vec, format="%Y" )
 crime.data$month  <- format( date.vec, format="%B" )
 
+# Drop cases for the most recent month.
+crime.data <- crime.data[ ! ( 
+  crime.data$month == format( Sys.Date(), format="%B" ) &
+  crime.data$year == format( Sys.Date(), format="%Y" ) 
+  ) , ]
 
 # Crimes by month.
 crimes.by.month <-
   crime.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%
-  filter( year != 2021 ) %>%
+  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
@@ -68,7 +73,7 @@ crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
-  filter( year != 2021 ) %>%
+  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 
@@ -91,7 +96,7 @@ crimes.type.by.month$month <-factor( month.abb[crimes.type.by.month$month],level
 
 <br>
 
-In a prior post, I discuss general trends in [crime in Phoenix](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html). In this post, I want to focus more attention on changes observed for 2020 and draw attention to the considerable decline in crime relative to other years. If you are interested in the 2021 data, take a look at my [ crime types in Phoenix](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html) analysis that is routinely updated.
+In a prior post, I discuss general trends in [crime in Phoenix](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_trends.html). In this post, I want to focus more attention on changes observed for 2020 and draw attention to the considerable decline in crime relative to other years. If you are interested in the most recent analysis of crime data, take a look at my [crime types in Phoenix](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types.html) page that is routinely updated.
 
 Here, I want to further unpack the trends by focusing on crime types.
 
@@ -109,7 +114,7 @@ Here, I want to further unpack the trends by focusing on crime types.
 
 Let's pull the most recent data for **crime incidents** from the site.
 
-The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r comma(n.cases)` crime incidents with complete data from 11/2015 to within a week of the current date. Since we are focusing on 2020, we will delete the data for 2021.    
+The data are reported as UCR crime classifications and have geographic information (block address, zip) as well as the date and time of the incident. As of `r format(Sys.time(), '%B, %Y')`, there were `r comma(n.cases)` crime incidents with complete data from 11/2015 to within a week of the current date. Since we are focusing on 2020, we will delete the data for 2021 and forward.    
 
 Let's start by looking at the monthly count of incidents over all crime types.
   
@@ -173,12 +178,18 @@ date.vec <- strptime( crime.data$OCCURRED.ON, format="%m/%d/%Y %H:%M" )
 crime.data$year   <- format( date.vec, format="%Y" )
 crime.data$month  <- format( date.vec, format="%B" )
 
+# Drop cases for the most recent month.
+crime.data <- crime.data[ ! ( 
+  crime.data$month == format( Sys.Date(), format="%B" ) &
+  crime.data$year == format( Sys.Date(), format="%Y" ) 
+  ) , ]
+
 # Crimes by month.
 crimes.by.month <-
   crime.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%
-  #filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
+  filter( year >= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
@@ -191,7 +202,7 @@ crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
-  #filter( year != 2021 ) %>%  # remove this comment when you have a few more years for 2021.
+  filter( year >= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 
