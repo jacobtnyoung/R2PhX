@@ -60,7 +60,6 @@ crimes.by.month <-
   crime.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%
-  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
@@ -73,7 +72,6 @@ crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
-  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 
@@ -189,7 +187,6 @@ crimes.by.month <-
   crime.data %>% 
   select( year, month ) %>%   
   filter( year != 2015 ) %>%
-  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month ) %>% 
   summarize( counts = n() ) %>% 
@@ -202,7 +199,6 @@ crimes.type.by.month <-
   crime.data %>% 
   select( year, month, UCR.CRIME.CATEGORY ) %>%   
   filter( year != 2015 ) %>%  
-  filter( year <= 2020 ) %>%
   filter( !is.na( year ) ) %>% 
   group_by( year, month, UCR.CRIME.CATEGORY ) %>% 
   summarize( counts = n() ) %>% 
