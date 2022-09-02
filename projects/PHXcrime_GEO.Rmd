@@ -145,6 +145,11 @@ The issue I am running into is that there are not many matches due to the addres
 
 <br>
 
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+
+<br><br>
+
+
 <p align="center">
 ***Last updated `r format(Sys.time(), '%d %B, %Y')`***
 </p>

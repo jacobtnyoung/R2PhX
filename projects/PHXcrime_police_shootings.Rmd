@@ -26,7 +26,7 @@ rm( list = ls() )
 
 ```{r, echo = FALSE, eval = TRUE}
 
-url <- "https://www.phoenixopendata.com/dataset/1e472b1f-80c1-4686-b80f-e930616f8580/resource/8f8c1739-b905-407f-9eb6-6b10db55b931/download/ois.csv"
+url <- "https://www.phoenixopendata.com/dataset/754b1156-a48f-4d1b-b17a-53bd96d5b2be/resource/24fe89fb-9d4f-4fba-8b40-9330a5f7d9e7/download/ois.csv"
 shooting.data <- read.csv( url, as.is = TRUE, header = TRUE )
 shooting.data <- na.omit( shooting.data )
 
@@ -290,5 +290,9 @@ ggplot(
 </p>
 
 <br>
+
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+
+<br><br>
 
 ###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***

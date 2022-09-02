@@ -536,4 +536,9 @@ Note that these plots represents **all** types of crimes. For a more elaborate d
 
 <br>
 
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+
+<br><br>
+
+
 ###### ***Last updated `r format(Sys.time(), '%d %B, %Y')`***

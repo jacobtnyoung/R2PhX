@@ -18,7 +18,8 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 [City of Phoenix](https://www.phoenix.gov/) open [data](https://www.phoenixopendata.com/) portal? It is a repository for data that the city collects and makes available. As of last check, there were over 50 datasets available. The site is well organized, so I would encourage you to open an new tab and check it out. The site has a [tips](https://www.phoenixopendata.com/pages/tips) page with a good intro to site navigation and how it is maintained.  
 
-*This* site uses the data from the [data portal](https://www.phoenixopendata.com/) to examine various topics (see below). For each topic, there are a set of questions that are examined using data from the portal. **Enjoy!**
+*This* site uses the data from the [data portal](https://www.phoenixopendata.com/) to examine various topics (see below). For each topic, there are a set of questions that are examined using data from the portal. ***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. **Enjoy!**  
+
 
 <br><br>
 
@@ -46,7 +47,7 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br>
 
-##### [Are police shootings by police officers increasing in Phoenix? (and other questions...)](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_police_shootings.html)
+##### Are police shootings by police officers increasing in Phoenix? (and other questions...) (CURRENTLY BEING REPAIRED)
 
 <br>
 
@@ -57,6 +58,10 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 <br>
 
 ##### [When it's hot in Phoenix, do people go to the heat shelter? Let's take a look!](https://jacobtnyoung.github.io/R2PhX/projects/PHX_heat_shelter_2020.html)
+
+<br>
+
+***Please*** report any corrections or comments to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
 
 <br><br>
 
