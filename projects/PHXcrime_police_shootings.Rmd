@@ -75,7 +75,7 @@ The dataset contains information about:
 ```{r, echo = TRUE, eval = FALSE}
 
 # set the url where the data are located.
-url <- "https://www.phoenixopendata.com/dataset/1e472b1f-80c1-4686-b80f-e930616f8580/resource/8f8c1739-b905-407f-9eb6-6b10db55b931/download/ois.csv"
+url <- "https://www.phoenixopendata.com/dataset/754b1156-a48f-4d1b-b17a-53bd96d5b2be/resource/24fe89fb-9d4f-4fba-8b40-9330a5f7d9e7/download/ois.csv"
 
 # pull in the csv file.
 shooting.data <- read.csv( url, as.is = TRUE, header = TRUE )
@@ -100,7 +100,7 @@ head( shooting.data$DATE )
 is.character( shooting.data$DATE )
 
 # Since the month variable is in an unusual format, we need to convert the date string to a date format code. Then pull off the month.
-date.vec <- strptime( shooting.data$DATE, format="%d-%b-%y" )
+date.vec <- strptime( shooting.data$DATE, format="%m/%d/%y" )
 
 # Now, let's use the format() function to create the month.
 shooting.data$month  <- format( date.vec, format="%B" )
@@ -116,7 +116,7 @@ shooting.data$month  <- format( date.vec, format="%B" )
 
 <br>
 
-As a first step, let's take a look at the monthly occurrence of officer involved shootings. The plot shows the monthly count of officer involved shootings from January, 2017 to `r format(Sys.time(), '%B, %Y')`. 
+As a first step, let's take a look at the monthly occurrence of officer involved shootings. The plot shows the monthly count of officer involved shootings from January, 2017 to `r format( Sys.time(), '%B, %Y' )`. 
 
 <br>
 
