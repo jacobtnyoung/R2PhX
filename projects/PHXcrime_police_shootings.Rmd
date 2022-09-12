@@ -318,10 +318,51 @@ f.nf.shootings.by.year %>%
    labs( x = "", y = "Incidents per Year" ) + 
    ggtitle( "Yearly Counts of Officer Involved Shootings in Phoenix, AZ by Fatal/Non-Fatal" ) +
    geom_smooth( method=lm, se=FALSE, col="lightblue", size = 1 ) +
-   scale_y_continuous(label = comma) +
+   scale_y_continuous( label = comma ) +
    theme_minimal() 
 
 ```
+
+<br>
+
+An important question is whether shootings have become more (or less) fatal over time. The plot below shows the fatality ratio, represented by the percentage of officer involved shootings in which there is a fatality.
+
+<br>
+
+```{r, echo = FALSE, eval = TRUE}
+
+# Create a plot for the ratio of fatal shootings to all shootings.
+fatal.shootings.by.year <- 
+  shooting.data %>% 
+  select( YEAR, FATALITY_FLG ) %>% 
+  filter( FATALITY_FLG == "Fatal" ) %>% 
+  group_by( YEAR ) %>% 
+  summarize( f.counts = n() ) %>% 
+  group_by( YEAR ) 
+
+shootings.by.year <- 
+  shooting.data %>% 
+  select( YEAR ) %>%   
+  group_by( YEAR ) %>% 
+  summarize( counts = n() ) 
+
+fatal.shootings.by.year$ratio <- fatal.shootings.by.year$f.counts / shootings.by.year$counts
+
+fatal.shootings.by.year %>% 
+  ggplot( aes( YEAR, ratio ) ) +
+  geom_line( color = "black" ) + 
+  geom_point( alpha = 1/5, color = "black" ) +
+  labs( x = "", y = "Ratio of Fatal Incidents per Year" ) + 
+  ggtitle( "Yearly Ratio of Fatal Officer Involved Shootings in Phoenix, AZ" ) +
+  geom_smooth( method=lm, se=FALSE, col="lightblue", size = 1 ) +
+  scale_y_continuous( label = comma ) +
+  theme_minimal() 
+
+```
+
+<br>
+
+Over time, there has been a decline in the number of officer involved shootings in which there is a fatality. 
 
 <br>
 
@@ -382,6 +423,33 @@ ggplot(
  scale_fill_manual(values = c("#ca0222", "#02677b")) +
  labs( title = "Plot of Suspect Age, Suspect Race, and Outcome for Officer Involved Shootings in Phoenix" ) +
  theme_gray() 
+
+# Create a plot for the ratio of fatal shootings to all shootings.
+fatal.shootings.by.year <- 
+  shooting.data %>% 
+  select( YEAR, FATALITY_FLG ) %>% 
+  filter( FATALITY_FLG == "Fatal" ) %>% 
+  group_by( YEAR ) %>% 
+  summarize( f.counts = n() ) %>% 
+  group_by( YEAR ) 
+
+shootings.by.year <- 
+  shooting.data %>% 
+  select( YEAR ) %>%   
+  group_by( YEAR ) %>% 
+  summarize( counts = n() ) 
+
+fatal.shootings.by.year$ratio <- fatal.shootings.by.year$f.counts / shootings.by.year$counts
+
+fatal.shootings.by.year %>% 
+  ggplot( aes( YEAR, ratio ) ) +
+  geom_line( color = "black" ) + 
+  geom_point( alpha = 1/5, color = "black" ) +
+  labs( x = "", y = "Incidents per Year" ) + 
+  ggtitle( "Yearly Counts of Officer Involved Shootings in Phoenix, AZ" ) +
+  geom_smooth( method=lm, se=FALSE, col="lightblue", size = 1 ) +
+  scale_y_continuous(label = comma) +
+  theme_minimal() 
 
 # Create a plot with race, age, and the outcome.
 ggplot(
