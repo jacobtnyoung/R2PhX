@@ -79,7 +79,7 @@ homicide.data <-
   crime.data %>% 
   filter( crime.type == "Homicide"  )
 
-# Help with formating the text.
+# Help with formatting the text.
 n.homicide.cases <- dim( homicide.data )[1]
 
 # Create the object of homicides by day.
@@ -230,13 +230,6 @@ homicide.month.all.year <-
     #strip.text.x = element_text( size = 15 ),
     strip.text.y = element_text( size = 8 ) ) +
   xlab( "Month" )
-
-###NOT WORKING.
-#grid.arrange(
-#  homicide.month.all + 
-#  homicide.month.all.year,
-#  ncol = 2
-#)
 
 ```
 
