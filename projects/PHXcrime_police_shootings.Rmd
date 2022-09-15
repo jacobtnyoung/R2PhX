@@ -363,7 +363,7 @@ Over time, there has been a decline in the number of officer involved shootings 
 
 There are more interesting features of the data:  
 
-  + Whites account for the majority of cases, with a proportion of `r round( ( table( shooting.data$SIMPLE_SUBJ_RE_GRP[shooting.data$SIMPLE_SUBJ_RE_GRP == "White"] ) / sum( shootings.by.month ) ), 2 )`. 
+  + Whites account for a minority of cases, with a proportion of `r round( ( table( shooting.data$SIMPLE_SUBJ_RE_GRP[shooting.data$SIMPLE_SUBJ_RE_GRP == "White"] ) / sum( shootings.by.month ) ), 2 )`. 
 
 <br>
 
