@@ -38,7 +38,7 @@ Crime trends are **very** difficult to assess, without seeing the data, because 
 
 **But**, if you want to know about crime in Phoenix, there is the open data portal! (That is the answer to your 'so what?' inquiry above.) Specifically, there are three files that pertain to the ["police" topic](https://www.phoenixopendata.com/organization/police-department):  
 
- *  [Officer Involved Shooting Incidents](https://www.phoenixopendata.com/dataset/officer-involved-shooting-incidents)  
+ *  [Officer Involved Shooting Incidents](https://www.phoenixopendata.com/dataset/ois)  
  
  *  [Calls for Service](https://www.phoenixopendata.com/dataset/calls-for-service)  
  
