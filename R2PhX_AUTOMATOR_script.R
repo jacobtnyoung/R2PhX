@@ -13,8 +13,5 @@ render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/projects/PHXcrime_homi
 # This runs the index file.
 render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/index.Rmd", "html_document" )
 
-# working through.
-#render( "/Users/jyoung20/Dropbox (ASU)/GitHub_repos/R2PhX/projects/PHXcrime_GEO.Rmd", "html_document" )
-
 # Close this script.
 quit( save = "no" )
