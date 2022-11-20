@@ -73,7 +73,7 @@ So, given the issues with the way government collects information on crime and t
 #### [*OR, head back to R 2 Phoenix page*](https://jacobtnyoung.github.io/R2PhX/)
 <br>
 
-***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues/new) page. Thanks!
 
 <br><br>
 

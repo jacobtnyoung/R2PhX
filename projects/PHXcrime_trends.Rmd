@@ -505,7 +505,7 @@ Note that these plots represents **all** types of crimes. For a more elaborate d
 
 <br>
 
-***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues/new) page. Thanks!
 
 <br><br>
 

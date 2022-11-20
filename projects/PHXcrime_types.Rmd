@@ -256,7 +256,7 @@ p2
 
 <br>
 
-***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues) page. Thanks!
+***Please*** report any needed corrections to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues/new) page. Thanks!
 
 <br><br>
 
