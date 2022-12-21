@@ -36,7 +36,7 @@ library( gridExtra )
 library( httr )
 library( pander )
 library( tidygeocoder )
-
+library( ggmap )
 
 # ----
 # Get the data
@@ -62,101 +62,13 @@ lat_longs <- crime.data.sub %>%
   geocode( Address.zip, method = 'osm', lat = latitude , long = longitude )
 
 
+lat_longs2 <- na.omit( lat_longs )
+lat_longs2 <- na.omit( lat_longs$longitude )
 
-
-
-crime.data$City <- rep( "Phoenix", dim( crime.data )[1] )
-crime.data$State <- rep( "Arizona", dim( crime.data )[1] )
-
-crime.data$Address.adj <- gsub( "XX","00",crime.data$X100.BLOCK.ADDR )
-
-demo <- crime.data %>% 
-  select( INC.NUMBER, X100.BLOCK.ADDR, City, State, ZIP )
-x <- sample( nrow( crime.data ), 20, replace = FALSE )
-demo <- demo[ x, ]
-rownames( demo ) <- NULL
-
-demo <- crime.data %>% 
-  select( INC.NUMBER, Address.adj, City, State, ZIP )
-x <- sample( nrow( crime.data ), 20, replace = FALSE )
-demo <- demo[ x, ]
-rownames( demo ) <- NULL
-
-# writing a csv file with the address list to feed into the geocode process
-write.csv( demo, "/Users/jyoung20/Desktop/TestAddresses.csv", row.names = FALSE )
-
-
-# temporarily setting the working directory for geocode
-wd2 <- "/Users/jyoung20/Desktop"
-setwd( wd2 )
-
-# creating a url and file path to use in the geocode query
-apiurl <- "https://geocoding.geo.census.gov/geocoder/geographies/addressbatch"
-addressFile <- "TestAddresses.csv"
-
-# geocode query
-resp <- POST( apiurl, 
-              body=list( addressFile = upload_file( addressFile ), 
-                        benchmark = "Public_AR_Census2020",
-                        vintage = "Census2020_Census2020",
-                        returntype = "csv" ), 
-              encode = "multipart" 
-)
-
-
-# Writing results in a csv using writelines function
-var_names <- c( "id", "input_address", 
-                "match", "match_type", 
-                "out_address", "lat_lon", 
-                "tiger_line_id", "tiger_line_side", 
-                "state_fips", "county_fips", 
-                "tract_fips", "block_fips" )
-var_names <- paste(var_names, collapse=',')
-writeLines( text=c(var_names, content(resp)), con="ResultsDemo.csv" )
-
-# loading the results we wrote
-res <- read.csv( "ResultsDemo.csv", header=TRUE, stringsAsFactors=FALSE, colClasses="character" )
-
-# Splitting Latitude and longitude coordinates
-lat.lon <- strsplit( res$lat_lon, "," )
-
-for( i in 1:length(lat.lon) )
-  {
-  if( length( lat.lon[[i]] ) < 2 )
-  lat.lon[[ i ]] <- c(NA,NA) 
-  }
-
-m <- matrix( unlist( lat.lon ), ncol=2, byrow=T )
-colnames(m) <- c("lon","lat")
-m <- as.data.frame( m )
-
-res <- cbind( res, m )
-head( res )
-
-# writing results with splitted lat lon in another file
-write.csv( res, "/Users/jyoung20/Desktop/ResultsDemo2.csv", row.names=FALSE )
-
-pander( head( res ) ) 
-
-crime.data$input_address <- crime.data$X100.BLOCK.ADDR
-
-npo.main <- left_join(crime.data, res, by = "input_address")
-
-
-HERE: need to batch these
-
-
-The issue I am running into is that there are not many matches due to the addresses being xd out.
-
-!Right: the issue is that 16XX could be 1600 or 16. So, that is throwing off the latitute.
-
-!BUT: when you make the XX a 00, you can cross check this with the zip code!!!
-  So, you need to figure out how to check the zip code and whether that is matching up
-  For example, if the address is 5200 4th st, does the zip code in teh data match the zip for 5200 4th st?
+HERE with going through
 
 
 ```
-
 
 
 
