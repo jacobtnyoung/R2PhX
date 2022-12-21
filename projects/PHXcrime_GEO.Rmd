@@ -25,8 +25,8 @@ rm( list = ls() )
 
 ```{r, echo = FALSE, eval = TRUE}
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-# I run this chunk so that I can go through it and have the tabs show the code.
+# ----
+# I run this chunk so that I can go through it and have the tabs show the code
 
 library( dplyr )
 library( tidyr )
@@ -35,12 +35,34 @@ library( forecast )
 library( gridExtra )
 library( httr )
 library( pander )
+library( tidygeocoder )
 
 
-# Get the data.
+# ----
+# Get the data
 url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
 crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
 crime.data <- na.omit( crime.data )
+
+# ----
+# The addresses are XX'd out to the last two digits
+# The workaround for this is to fill these two digits with
+# zeros and then append the zip code
+crime.data$Address.adj <- gsub( "XX", "00", crime.data$X100.BLOCK.ADDR )
+
+# Append the zip code
+crime.data$Address.zip <- paste( crime.data$Address.adj, crime.data$ZIP )
+
+crime.data.sub <- crime.data[sample( nrow( crime.data ), 100 ), ]
+
+
+
+# Now, use the tidygeocoder package to get the lat and lon data
+lat_longs <- crime.data.sub %>%
+  geocode( Address.zip, method = 'osm', lat = latitude , long = longitude )
+
+
+
 
 
 crime.data$City <- rep( "Phoenix", dim( crime.data )[1] )
