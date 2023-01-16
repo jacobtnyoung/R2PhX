@@ -229,7 +229,7 @@ crimes.by.day %>%
 ```
 
 <br>
-The plot shows a fairly stable daily count of crimes. *But*, a marked **decline** beginning at the end of 2019. Since the end of 2019 through the beginning of 2021, crime incidents have been trending down in Phoenix. However, beginning in 2021, there is an upward trend that continues through 2022.   
+The plot shows a fairly stable daily count of crimes. *But*, a marked **decline** towards the end of 2019. Since the end of 2019 through the beginning of 2021, crime incidents have been trending down in Phoenix. Importantly, for 2022, there was an overall decrease in the daily counts of crime incidents.   
 
 For a more in-depth examination of crime in 2020 and how it differed from 2019, check out this [analysis](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types_2020.html).
 <br>
@@ -374,7 +374,7 @@ The plot showing the monthly rates by year helps us visualize the data better. T
 
   + First, the trend for 2020 is *unusual* relative to other years. *Particularly* for the period of March-June. For a more elaborate discussion of this trend, see this [analysis](https://jacobtnyoung.github.io/R2PhX/projects/PHXcrime_types_2020.html).  
   
-  + Second, relative to past years, more recent criminal incidents tend to be lower. For example, comparing `r format(Sys.time(), '%Y')` to 2016 shows a generally lower rate of crime incidents. 
+  + Second, relative to past years, more recent criminal incidents tend to be lower. For example, 2021 and 2022 both show a generally lower rate of crime incidents relative to 2017-2020. 
 
 <br>
 
