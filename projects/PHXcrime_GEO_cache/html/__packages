@@ -1,0 +1,15 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
+dplyr
+pander
+tidyr
+tidygeocoder
+tidycensus
+tigris
+ggplot2
+ggmap
