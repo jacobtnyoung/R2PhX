@@ -14,7 +14,6 @@ render( here::here( "projects/PHXcrime.Rmd" ), "html_document" )
 render( here::here( "projects/PHXcrime_trends.Rmd" ), "html_document" )
 render( here::here( "projects/PHXcrime_types.Rmd" ), "html_document" )
 render( here::here( "projects/PHXcrime_types_2020.Rmd" ), "html_document" )
-render( here::here( "projects/PHX_heat_shelter_2020.Rmd" ), "html_document" )
 render( here::here( "projects/PHXcrime_police_shootings.Rmd" ), "html_document" )
 render( here::here( "projects/PHXcrime_homicide.Rmd" ), "html_document" )
 
