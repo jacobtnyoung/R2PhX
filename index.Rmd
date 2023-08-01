@@ -53,14 +53,6 @@ Welcome to [R 2 Phoenix]()! This site is dedicated to analyzing data from the [C
 
 <br><br>
 
-#### **Other Questions/Topics**  
-
-<br>
-
-##### [When it's hot in Phoenix, do people go to the heat shelter? Let's take a look!](https://jacobtnyoung.github.io/R2PhX/projects/PHX_heat_shelter_2020.html)
-
-<br>
-
 ***Please*** report any corrections or comments to the [Issues](https://github.com/jacobtnyoung/R2PhX/issues/new) page. Thanks!
 
 <br><br>
