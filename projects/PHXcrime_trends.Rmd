@@ -39,7 +39,7 @@ library( here )
 # Crime incidents.
 
 # get the crime data from the data folder
-#url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
+#url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crime-data_crime-data_crimestat.csv"
 
 loc <- "data/data-raw/crime-data_crime-data_crimestat.csv"
 crime.data <- read.csv( here( loc ), as.is = TRUE, header = TRUE )
@@ -277,7 +277,7 @@ Importantly, since the end of 2019, there has been an overall decrease in the da
 ```{r, echo = TRUE, eval = FALSE}
 
 # set the url where the data are located.
-url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
+url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crime-data_crime-data_crimestat.csv"
 
 # pull in the csv file.
 crime.data <- read.csv( url, as.is = TRUE, header = TRUE )

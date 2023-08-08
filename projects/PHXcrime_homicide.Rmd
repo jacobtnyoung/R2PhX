@@ -35,17 +35,18 @@ library( gridExtra )
 library( scales )
 library( forecast )
 library( openxlsx )
+library( here )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Crime incidents.
 
 # Get the data.
-url <- "https://www.phoenixopendata.com/dataset/cc08aace-9ca9-467f-b6c1-f0879ab1a358/resource/0ce3411a-2fc6-4302-a33f-167f68608a20/download/crimestat.csv"
-crime.data <- read.csv( url, as.is = TRUE, header = TRUE )
+loc <- "data/data-raw/crime-data_crime-data_crimestat.csv"
+crime.data <- read.csv( here( loc ), as.is = TRUE, header = TRUE )
 crime.data <- na.omit( crime.data )
 
-# Help with formating the text.
+# Help with formatting the text.
 n.cases <- dim( crime.data )[1]
 
 # Clean up the dates.
@@ -138,30 +139,53 @@ homicides.by.year <-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Population data for Phoenix.
 
-# get the population data to create the rates.
-pop.data <- read.xlsx(
+# There are multiple files we need for the population data
+
+# get years 2016-2019
+pop.data.2016.2019 <- read.xlsx(
   "https://www2.census.gov/programs-surveys/popest/tables/2010-2019/cities/totals/SUB-IP-EST2019-ANNRES-04.xlsx",
   colNames = TRUE,
   startRow = 4
 )
 
-# Find the row with the data for Phoenix.
-grep("Phoenix", pop.data[,1])
+# Find the row with the data for Phoenix
+grep("Phoenix", pop.data.2016.2019[,1])
 
-# It is the 55th row in the object. So, we need to pull that row.
-phoenix.pop <-  pop.data[55,]
+# It is the 55th row in the object
+phoenix.pop.2016.2019 <-  pop.data.2016.2019[55,]
+phoenix.pop.2016.2019
+
+# We only need the data for 2016-2019
+phoenix.pop.2016.2019 <- phoenix.pop.2016.2019[-c(1:9)]
+phoenix.pop.2016.2019
+
+# Repeat these steps for the 2020-2021 data
+pop.data.2020.2021 <- read.xlsx(
+  "https://www2.census.gov/programs-surveys/popest/tables/2020-2021/cities/totals/SUB-IP-EST2021-POP-04.xlsx",
+  colNames = TRUE,
+  startRow = 4
+)
+
+grep("Phoenix", pop.data.2020.2021[,1])
+
+phoenix.pop.2020.2021 <-  pop.data.2020.2021[55,]
+phoenix.pop.2020.2021
+
+phoenix.pop.2020.2021 <- phoenix.pop.2020.2021[-c(1:2)]
+phoenix.pop.2020.2021
+
+# combine the data into a single object
+phoenix.pop <- cbind( phoenix.pop.2016.2019, phoenix.pop.2020.2021 )
 phoenix.pop
 
-# Now, we only need the data for 2016-2019.
-phoenix.pop <- phoenix.pop[-c(1:9)]
-phoenix.pop
+# Missing 2022 and 2023
+# Add the difference for each year until you get the actual demographic data
+phoenix.pop$"2022" <- phoenix.pop$"2021" + phoenix.pop$"2021" - phoenix.pop$"2020"
+phoenix.pop$"2023" <- phoenix.pop$"2022" + phoenix.pop$"2022" - phoenix.pop$"2021"
 
-# Just add the difference for each year until you get the actual demographic data..
-phoenix.pop.2020 <- phoenix.pop[4] + phoenix.pop[4] - phoenix.pop[3]
-phoenix.pop.2021 <- phoenix.pop.2020 + phoenix.pop[4] - phoenix.pop[3]
-phoenix.pop.2022 <- phoenix.pop.2021 + phoenix.pop[4] - phoenix.pop[3]
-phoenix.pop.data <- as.numeric( c( phoenix.pop, phoenix.pop.2020, phoenix.pop.2021, phoenix.pop.2022 ) )
-
+# now we coerce the data to be numeric to use it below
+phoenix.pop.data <- as.numeric( phoenix.pop )
+phoenix.pop.data
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # Create the rates using the population data.
