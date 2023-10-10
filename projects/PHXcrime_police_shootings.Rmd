@@ -25,9 +25,13 @@ rm( list = ls() )
 <br>
 
 ```{r, echo = FALSE, eval = TRUE}
-url <- "https://www.phoenixopendata.com/dataset/754b1156-a48f-4d1b-b17a-53bd96d5b2be/resource/f4df6466-e4d5-4452-ad1b-5fb7f3fa19df/download/oisindividual.csv"
+# get the shooting data from the data folder
+# "https://www.phoenixopendata.com/dataset/ois/resource/f4df6466-e4d5-4452-ad1b-5fb7f3fa19df"
 
-shooting.data <- read.csv( url, as.is = TRUE, header = TRUE )
+library( here )
+
+loc <- "data/data-raw/ois_ois-individual-summary_oisindividual.csv"
+shooting.data <- read.csv( here( loc ), as.is = TRUE, header = TRUE )
 #shooting.data <- na.omit( shooting.data )
 
 library( scales )
