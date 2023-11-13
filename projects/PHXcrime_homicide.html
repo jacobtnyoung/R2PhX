@@ -387,7 +387,7 @@ display: none;
 
 <h1 class="title toc-ignore">What is going on with homicide in
 Phoenix?</h1>
-<h4 class="date">07 November, 2023</h4>
+<h4 class="date">13 November, 2023</h4>
 
 </div>
 
@@ -484,10 +484,10 @@ head( crime.data$OCCURRED.ON )</code></pre>
 <pre class="r"><code># Convert the string dates to a date format code.
 date.vec &lt;- strptime( crime.data$OCCURRED.ON, format=&quot;%m/%d/%Y %H:%M&quot; )
 head( date.vec )</code></pre>
-<pre><code>## [1] &quot;2015-11-01 MST&quot; &quot;2015-11-01 MST&quot; &quot;2015-11-01 MST&quot; &quot;2015-11-01 MST&quot; &quot;2015-11-01 MST&quot; &quot;2015-11-01 MST&quot;</code></pre>
+<pre><code>## [1] &quot;2015-11-01 EDT&quot; &quot;2015-11-01 EDT&quot; &quot;2015-11-01 EDT&quot; &quot;2015-11-01 EDT&quot; &quot;2015-11-01 EDT&quot; &quot;2015-11-01 EDT&quot;</code></pre>
 <pre class="r"><code>tail( date.vec )</code></pre>
-<pre><code>## [1] &quot;2023-10-05 22:43:00 MST&quot; &quot;2023-10-05 23:00:00 MST&quot; &quot;2023-10-05 23:30:00 MST&quot; &quot;2023-10-05 23:39:00 MST&quot;
-## [5] &quot;2023-10-05 23:45:00 MST&quot; &quot;2023-10-05 23:54:00 MST&quot;</code></pre>
+<pre><code>## [1] &quot;2023-10-05 22:43:00 EDT&quot; &quot;2023-10-05 23:00:00 EDT&quot; &quot;2023-10-05 23:30:00 EDT&quot; &quot;2023-10-05 23:39:00 EDT&quot;
+## [5] &quot;2023-10-05 23:45:00 EDT&quot; &quot;2023-10-05 23:54:00 EDT&quot;</code></pre>
 <pre class="r"><code># Now, let&#39;s use the format() function to create several objects based on the date and time.
 crime.data$year   &lt;- format( date.vec, format=&quot;%Y&quot; )
 crime.data$month  &lt;- format( date.vec, format=&quot;%B&quot; )
@@ -730,8 +730,8 @@ page</a>
 <a href="https://github.com/jacobtnyoung/R2PhX/issues/new">Issues</a>
 page. Thanks!</p>
 <p><br><br></p>
-<div id="last-updated-07-november-2023" class="section level6">
-<h6><strong><em>Last updated 07 November, 2023</em></strong></h6>
+<div id="last-updated-13-november-2023" class="section level6">
+<h6><strong><em>Last updated 13 November, 2023</em></strong></h6>
 </div>
 </div>
 
