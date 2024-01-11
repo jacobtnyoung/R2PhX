@@ -144,10 +144,11 @@ phoenix.pop.2020.2021
 phoenix.pop <- cbind( phoenix.pop.2016.2019, phoenix.pop.2020.2021 )
 phoenix.pop
 
-# Missing 2022 and 2023
+# Missing 2022 and 2023 and 2024
 # Add the difference for each year until you get the actual demographic data
 phoenix.pop$"2022" <- phoenix.pop$"2021" + phoenix.pop$"2021" - phoenix.pop$"2020"
 phoenix.pop$"2023" <- phoenix.pop$"2022" + phoenix.pop$"2022" - phoenix.pop$"2021"
+phoenix.pop$"2024" <- phoenix.pop$"2023" + phoenix.pop$"2023" - phoenix.pop$"2022"
 
 # now we coerce the data to be numeric to use it below
 phoenix.pop.data <- as.numeric( phoenix.pop )
@@ -447,10 +448,11 @@ Ok! We have our population data. But, what about years after 2021? These are not
 
 ```{r, echo = TRUE, eval = TRUE}
 
-# Missing 2022 and 2023
+# Missing 2022 and 2023 and 2024
 # Add the difference for each year until you get the actual demographic data
 phoenix.pop$"2022" <- phoenix.pop$"2021" + phoenix.pop$"2021" - phoenix.pop$"2020"
 phoenix.pop$"2023" <- phoenix.pop$"2022" + phoenix.pop$"2022" - phoenix.pop$"2021"
+phoenix.pop$"2024" <- phoenix.pop$"2023" + phoenix.pop$"2023" - phoenix.pop$"2022"
 
 # now we coerce the data to be numeric to use it below
 phoenix.pop.data <- as.numeric( phoenix.pop )
